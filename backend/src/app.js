@@ -1,10 +1,6 @@
-express = require('express');
-bodyParser = require('body-parser');
-const app = express();
-const port = 8080;
-app.listen(port, () => {
-    console.log('conectado al puerto 8080');
-});
+import express from 'express';
+import bodyParser from 'body-parser';
+export const app = express();
 
 app.use(bodyParser.json());
 //cors
