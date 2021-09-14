@@ -1,10 +1,10 @@
 import { Schema, model } from 'mongoose';
-import { modelSupervisor } from './schemaSupervisor';
+import { schemaSupervisor } from './schemaSupervisor';
 
-const schemaOrdenProduccion = new Schema({
+export const schemaOrdenProduccion = new Schema({
     detalle: String,
     fecha: String,
-    supervisor: modelSupervisor,
+    supervisor: schemaSupervisor,
     otis: [],
     roscas: [],
 });

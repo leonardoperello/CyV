@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose';
 
-const schemaTipoDeEstado = new Schema({
+export const schemaTipoDeEstado = new Schema({
     nombre: String,
     descripcion: String,
 });
 
-export const modelTipoDeEStado = model('tipoDeEstado', schemaTipoDeEstado, 'tipoDeEstado');
+export const modelTipoDeEstado = model('tipoDeEstado', schemaTipoDeEstado, 'tipoDeEstado');

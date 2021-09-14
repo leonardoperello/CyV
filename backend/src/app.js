@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 export const app = express();
-
+import tareaRoutes from './controllers/tarea';
 app.use(bodyParser.json());
 //cors
 app.use((req, res, next) => {
@@ -14,3 +14,8 @@ app.use((req, res, next) => {
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     next();
 });
+
+
+//app.use('/oti', otiRoutes);
+//app.use('/rosca', roscaRoutes);
+app.use('/tarea', tareaRoutes);

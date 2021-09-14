@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const schemaCliente = new Schema({
+export const schemaCliente = new Schema({
     CUIT: String,
     DNI: String,
     nombre: String,

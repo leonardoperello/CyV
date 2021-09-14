@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const schemaOperario = new Schema({
+export const schemaOperario = new Schema({
     numeroEmpleado: String,
     DNI: String,
     nombre: String,
