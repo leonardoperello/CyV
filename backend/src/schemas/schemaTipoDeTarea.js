@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const schemaTipoDeTarea = new Schema({
+export const schemaTipoDeTarea = new Schema({
     nombre: String,
     descripcion: String,
 });

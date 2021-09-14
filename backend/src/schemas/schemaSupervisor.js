@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const schemaSupervisor = new Schema({
+export const schemaSupervisor = new Schema({
     numeroEmpleado: String,
     DNI: String,
     nombre: String,
