@@ -34,9 +34,9 @@ router.post("/", async function (req, res) {
 // no se si esta bien esa linea que dice let tarea
 router.patch("/:id", async function (req, res) {
   try {
-    let tarea = { _id: req.params.id };
+    let estado = { _id: req.params.id };
     let data = req.body;
-    const result = await modelTarea.findOneAndUpdate(tarea, data);
+    const result = await modelTarea.findOneAndUpdate(estado, data);
     res.json(result);
   } catch (error) {
     console.log(error);

@@ -37,9 +37,9 @@ router.post('/', async function (req, res) {
 
 router.patch('/:id', async function (req, res) {
     try {
-        let tarea = { _id: req.params.id };
+        let rosca = { _id: req.params.id };
         let data = req.body;
-        const result = await modelRosca.findOneAndUpdate(tarea, data);
+        const result = await modelRosca.findOneAndUpdate(rosca, data);
         res.json(result)
     } catch (error) {
         console.log(error);
