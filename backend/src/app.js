@@ -1,17 +1,19 @@
 import express from "express";
 import bodyParser from "body-parser";
 export const app = express();
-
-import otiRouter from "./routers/oti";
-
-import tareaRoutes from "./controllers/tarea";
-import roscaRoutes from "./controllers/rosca";
-
-import estadoRoutes from "./controllers/estado";
-import ordenRoutes from "./controllers/orden";
-import operarioRoutes from "./controllers/operario";
-import supervisorRoutes from "./controllers/supervisor";
-
+import tareaRoutes from "./routers/tarea";
+import roscaRoutes from "./routers/rosca";
+import otiRoutes from "./routers/oti";
+import estadoRoutes from "./routers/estado";
+import ordenRoutes from "./routers/orden";
+import operarioRoutes from "./routers/operario";
+import supervisorRoutes from "./routers/supervisor";
+import altaOtiRoutes from "./routers/altaOti";
+import altaTareaRoutes from "./routers/altaTarea";
+import altaOrdenDeProduccionRoutes from "./routers/altaOrdenDeProduccion";
+import altaAsignarTareasRoutes from "./routers/altaAsignarTareas";
+import cambioDeEstadoRoutes from "./routers/cambioDeEstado";
+import altaEstadoRoutes from "./routers/altaEstado";
 app.use(bodyParser.json());
 //cors
 app.use((req, res, next) => {
