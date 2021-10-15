@@ -21,7 +21,28 @@ const getByID = async (req, res) => {
   }
 };
 
-const postOti = async (req, res) => {};
+const postOti = async (req, res) => {
+  try {
+    const dataOti = req.body.datosOTI; //datos basicos y oti
+    const fechas = req.body.fechas; // fechas de orden de produccion
+    const orden = await model.find(); //obtener orden de produccion
+    //ordenarlas por fechas
+    //seleccionar una
+    const rosca = model.findOne(orden);
+    for (let index = 0; index < array.length; index++) {
+      const element = array[index];
+      //ir a metodo de cargar tareas
+    }
+    //ir a alta estado oti con estado = inializada
+    const res = await modelOti.create(data);
+    res.status(200).send(res);
+    //actualizar orden
+    const resOrden = await modelOrdenProduccion.findOneAndUpdate(orden, res);
+    res.status(200).send(resOrden);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
 
 const patchOti = async (req, res) => {
   try {
