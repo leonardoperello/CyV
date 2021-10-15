@@ -11,44 +11,37 @@ const getOtis = async (req, res) => {
   }
 };
 
-router.get("/:id", async function (req, res) {
+const getByID = async (req, res) => {
   try {
-    const id = req.params.id;
-    const result = await modelOti.findOne({ _id: id });
-    res.json(result);
+    const id = req.params.otiID;
+    const oti = await modelOti.findOne({ _id: id });
+    res.status(200).send(oti);
   } catch (error) {
-    console.log(error);
+    res.status(400).send(error);
   }
-});
+};
 
-router.post("/", async function (req, res) {
-  let data = req.body;
-  try {
-    const resultInsert = await modelOti.create(data);
-    res.json(resultInsert);
-  } catch (error) {
-    console.log(error);
-  }
-});
+const postOti = async (req, res) => {};
 
-router.patch("/:id", async function (req, res) {
+const patchOti = async (req, res) => {
   try {
-    let oti = { _id: req.params.id };
+    const oti = req.params.otiID;
     let data = req.body;
     const result = await modelOti.findOneAndUpdate(oti, data);
-    res.json(result);
+    res.status(200).send(result);
   } catch (error) {
-    console.log(error);
+    res.status(400).send(error);
   }
-});
+};
 
-router.delete("/:id", async function (req, res) {
+const deleteOti = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.params.otiID;
     const result = await modelOti.deleteOne({ _id: id });
-    res.json(result);
+    res.status(200).send(result);
   } catch (error) {
-    console.log(error);
+    res.status(400).send(error);
   }
-});
-export default { getOtis };
+};
+
+export default { getOtis, getByID, postOti, patchOti, deleteOti };
