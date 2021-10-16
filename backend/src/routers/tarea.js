@@ -4,7 +4,7 @@ const router = new express.Router();
 
 router.route("/").get(tareaController.getTareas);
 router.route("/:id").get(tareaController.getByID);
-router.route("/").post(tareaController.altaTarea);
+router.route("/:data").post(tareaController.altaTarea);
 router.route("/:id").patch(tareaController.patchTarea);
 router.route("/:id").delete(tareaController.deleteTarea);
 

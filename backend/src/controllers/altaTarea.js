@@ -1,7 +1,6 @@
 import express from "express";
 import { modelTarea } from "../schemas/schemaTarea";
-import { modelSector } from "../schemas/schemaSector";
-import { modelTipoDeTarea } from "../schemas/schemaTipoDeTarea";
+import moment from "moment";
 
 const router = express.Router();
 
@@ -25,10 +24,34 @@ const getByID = async (req, res) => {
 };
 
 const altaTarea = async (req, res) => {
-  let data = req.body;
   try {
-    const nuevaTarea = await modelTarea.create(data);
-    res.status(200).send(nuevaTarea);
+    // const idTipo = req.params.data.idTipo;
+    // const idSector = req.params.data.idSector;
+    // const sector = modelSector.findOne({ _id: idTipo });
+    // const tipoTarea = modelTipoDeTarea.findOne({ _id: idSector });
+    const dataTarea = req.body;
+
+    const nuevaTarea = {
+      descripcion: dataTarea.descripcion,
+      nombre: dataTarea.nombre,
+      fechaInicio: moment().format(dataTarea.fechaInicio),
+      fechaFin: moment().format(dataTarea.fechaFin),
+      numeroDeOrden: dataTarea.numeroDeOrden,
+      tipoDeTarea: dataTarea.tipoDeTarea,
+      sector: dataTarea.sector,
+      operario: {},
+      estado: {
+        fechaInicio: moment().format(dataTarea.fechaInicio),
+        fechaFin: moment().format(dataTarea.fechaFin),
+        observacion: "obs_2",
+        tipoDeEstado: {
+          nombre: "inicializada",
+          descripcion: "se ha inicializado con exito",
+        },
+      },
+    };
+    const res = await modelTarea.create(nuevaTarea);
+    res.status(200).send(res);
   } catch (error) {
     res.status(400).send(error);
   }
