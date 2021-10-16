@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import altaEstadoRoutes from "./routers/altaEstado";
-import altaOtiRoutes from "./routers/oti";
+import otiRoutes from "./routers/oti";
 import rosca from "./routers/rosca";
 export const app = express();
 app.use(bodyParser.json());
@@ -17,7 +17,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/altaOti", altaOtiRoutes);
+app.use("/oti", otiRoutes);
 app.use("/altaEstado", altaEstadoRoutes);
 app.use("/rosca", rosca);
 // app.use("/altaTarea", altaTareaRoutes);
