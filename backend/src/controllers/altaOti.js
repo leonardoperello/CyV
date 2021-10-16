@@ -22,7 +22,7 @@ const getByID = async (req, res) => {
   }
 };
 
-const postOti = async (req, res) => {
+const altaOti = async (req, res) => {
   try {
     const dataOti = req.body.datosOTI; //datos basicos y oti
     const fechas = req.body.fechas; // fechas de orden de produccion
@@ -66,7 +66,7 @@ const deleteOti = async (req, res) => {
   }
 };
 
-export default { getOtis, getByID, postOti, patchOti, deleteOti };
+export default { getOtis, getByID, altaOti, patchOti, deleteOti };
 
 /*
 router.createOti("/", async function (req, res) {

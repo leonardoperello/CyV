@@ -5,7 +5,7 @@ const router = new express.Router();
 
 router.route("/").get(otiController.getOtis);
 router.route("/:id").get(otiController.getByID);
-router.route("/").post(otiController.postOti);
+router.route("/").post(otiController.altaOti);
 router.route("/:id").patch(otiController.patchOti);
 router.route("/:id").delete(otiController.deleteOti);
 
