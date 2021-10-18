@@ -78,4 +78,14 @@ const deleteTarea = async (req, res) => {
   }
 };
 
-export default { getTareas, getByID, altaTarea, patchTarea, deleteTarea };
+const putTarea = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await modelTarea.findOneAndUpdate({ _id: id });
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+export default { getTareas, getByID, altaTarea, patchTarea, deleteTarea, putTarea };
