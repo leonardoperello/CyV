@@ -26,6 +26,8 @@ const getByID = async (req, res) => {
 
 const altaTarea = async (req, res) => {
   try {
+    console.log("estoyu enm alta tarea");
+    console.log(req.body.descripcion);
     moment().format("YYYY/MM/DD");
     const tarea = new modelTarea({
       descripcion: req.body.descripcion,

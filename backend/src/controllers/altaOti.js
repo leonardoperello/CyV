@@ -48,12 +48,12 @@ const altaOti = async (req, res) => {
     console.log(nuevaOti.sector);
     //tareas
     for (let index = 0; index < req.body.tareas.length; index++) {
-      console.log(req.body.tareas[index]);
+      console.log(req.body.tareas[index]); 
       const element = await altaTarea(req.body.tareas[index]);
       console.log(element);
       nuevaOti.tareas.push(element);
     }
-    
+
     console.log("sali de los for, ya termine");
     const data = {
       fechaInicio: moment().format(req.body.fechaI),
