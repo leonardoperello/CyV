@@ -1,5 +1,6 @@
 import express from "express";
 import { modelTarea } from "../schemas/schemaTarea";
+import { cargarEstado } from "./altaEstado.controllers";
 import moment from "moment";
 
 const router = express.Router();
@@ -25,37 +26,65 @@ const getByID = async (req, res) => {
 
 const altaTarea = async (req, res) => {
   try {
-    // const idTipo = req.params.data.idTipo;
-    // const idSector = req.params.data.idSector;
-    // const sector = modelSector.findOne({ _id: idTipo });
-    // const tipoTarea = modelTipoDeTarea.findOne({ _id: idSector });
-    const dataTarea = req.body;
+    moment().format("YYYY/MM/DD");
+    const tarea = new modelTarea({
+      descripcion: req.body.descripcion,
+      nombre: req.body.nombre,
+      fechaInicio: moment().format(req.body.fechaI),
+      fechaFin: moment().format(req.body.fechaF),
+      numeroDeOrden: req.body.numero,
+      tipoDeTarea: req.body.tipoDeTarea,
+      sector: req.body.sector,
+      idOperario: "",
+      estado: [],
+    });
 
-    const nuevaTarea = {
-      descripcion: dataTarea.descripcion,
-      nombre: dataTarea.nombre,
-      fechaInicio: moment().format(dataTarea.fechaInicio),
-      fechaFin: moment().format(dataTarea.fechaFin),
-      numeroDeOrden: dataTarea.numeroDeOrden,
-      tipoDeTarea: dataTarea.tipoDeTarea,
-      sector: dataTarea.sector,
-      operario: {},
-      estado: {
-        fechaInicio: moment().format(dataTarea.fechaInicio),
-        fechaFin: moment().format(dataTarea.fechaFin),
-        observacion: "obs_2",
-        tipoDeEstado: {
-          nombre: "inicializada",
-          descripcion: "se ha inicializado con exito",
-        },
+    const data = {
+      fechaInicio: moment().format(req.body.fechaI),
+      fechaFin: moment().format(req.body.fechaF),
+      observacion: "creado correctamente",
+      tipoEstado: {
+        nombre: req.body.nombreEstado,
+        descripcion: req.body.descripcionEstado,
       },
     };
-    const res = await modelTarea.create(nuevaTarea);
-    res.status(200).send(res);
+    const nuevoEstado = await cargarEstado(data);
+    console.log(nuevoEstado);
+    tarea.estado.push(nuevoEstado);
+    const tt = await tarea.save();
+
+    
+    res.status(200).send(tt);
   } catch (error) {
     res.status(400).send(error);
   }
 };
+/*
+    const nuevaTarea = {
+      descripcion: req.body.descripcion,
+      nombre: req.body.nombre,
+      fechaInicio: moment().format(req.body.fechaInicio),
+      fechaFin: moment().format(req.body.fechaFin),
+      numeroDeOrden: req.body.numeroDeOrden,
+      tipoDeTarea: req.body.tipoDeTarea,
+      sector: { nombre: req.body.sector, operario: {} },
+      operario: {},
+      estado: {
+        fechaInicio: moment().format(req.body.fechaInicioEs),
+        fechaFin: moment().format(req.body.fechaFinEs),
+        observacion: req.body.observacion,
+        tipoDeEstado: {
+          nombre: req.body.nombreTipo,
+          descripcion: req.body.descripcionTipo,
+        },
+      },
+    };
+
+    const res = await modelTarea.create(req.body);
+    res.status(200).send(res);
+  } catch (error) {
+    res.status(400).send(req.body);
+  }*/
 
 const patchTarea = async (req, res) => {
   try {

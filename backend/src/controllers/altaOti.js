@@ -24,12 +24,12 @@ const getByID = async (req, res) => {
 
 const altaOti = async (req, res) => {
   try {
-    const dataOti = req.body.datosOTI; //datos basicos y oti
-    const fechas = req.body.fechas; // fechas de orden de produccion
-    const orden = await model.find(); //obtener orden de produccion
+    
+    const fechaInicio = req.body.fechaI; //datos basicos y oti
+    const fechaFin = req.body.fechaF; // fechas de orden de produccion
     //ordenarlas por fechas
     //seleccionar una
-    const rosca = model.findOne(orden);
+    const rosca = model.findOne(req.body.orden);
     for (let index = 0; index < array.length; index++) {
       const element = array[index];
       //ir a metodo de cargar tareas

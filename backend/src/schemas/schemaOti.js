@@ -8,7 +8,7 @@ export const schemaOti = new Schema({
   fechaInicio: Date,
   fechaFin: Date,
   rosca: schemaRosca,
-  sector: schemaSector,
+  sector: [schemaSector],
   tareas: [schemaTarea],
   estados: [schemaEstado],
 });
