@@ -19,7 +19,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/altaOti", altaOtiRoutes);
+app.use("/oti", altaOtiRoutes);
 app.use("/estado", estadoRoutes);
 app.use("/rosca", rosca);
 app.use("/tarea", tareaRoutes);

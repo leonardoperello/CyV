@@ -49,11 +49,10 @@ const altaTarea = async (req, res) => {
       },
     };
     const nuevoEstado = await cargarEstado(data);
-    console.log(nuevoEstado);
+    //console.log(nuevoEstado);
     tarea.estado.push(nuevoEstado);
     const tt = await tarea.save();
 
-    
     res.status(200).send(tt);
   } catch (error) {
     res.status(400).send(error);
@@ -117,4 +116,11 @@ const putTarea = async (req, res) => {
   }
 };
 
-export default { getTareas, getByID, altaTarea, patchTarea, deleteTarea, putTarea };
+export default {
+  getTareas,
+  getByID,
+  altaTarea,
+  patchTarea,
+  deleteTarea,
+  putTarea,
+};
