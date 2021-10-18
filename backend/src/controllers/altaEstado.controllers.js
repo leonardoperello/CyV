@@ -1,13 +1,12 @@
 import { modelEstado } from "../schemas/schemaEstado";
-import { modelOti } from "../schemas/schemaOti";
 import moment from "moment";
 
 export async function cargarEstado(data) {
-  // const query = { _id: data.idOti };
-  //const oti = await modelOti.findOne(query);
+
+
   const estado = {
     fechaInicio: moment().format(data.fechaInicio),
-    fechaFin: moment().format(data.fechaFin),
+    fechaFin: data.fechaFin ? moment().format(data.fechaFin) : null,
     observacion: data.observacion,
     tipoEstado: data.tipoEstado,
   };
