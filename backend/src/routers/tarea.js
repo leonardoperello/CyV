@@ -6,6 +6,7 @@ router.route("/").get(tareaController.getTareas);
 router.route("/:id").get(tareaController.getByID);
 router.route("/").post(tareaController.altaTarea);
 router.route("/:id").patch(tareaController.patchTarea);
+router.route("/:id").put(tareaController.putTarea);
 router.route("/:id").delete(tareaController.deleteTarea);
 
 export default router;
