@@ -1,5 +1,10 @@
 import express from "express";
 import { modelOti } from "../schemas/schemaOti";
+import { altaTarea } from "../controllers/altaTarea";
+import { cargarEstado } from "./altaEstado.controllers";
+import { modelOrdenProduccion } from "../schemas/schemaOrdenProduccion";
+import moment from "moment";
+
 const router = express.Router();
 
 const getOtis = async (req, res) => {
@@ -24,21 +29,53 @@ const getByID = async (req, res) => {
 
 const altaOti = async (req, res) => {
   try {
-    const dataOti = req.body.datosOTI; //datos basicos y oti
-    const fechas = req.body.fechas; // fechas de orden de produccion
-    const orden = await model.find(); //obtener orden de produccion
-    //ordenarlas por fechas
-    //seleccionar una
-    const rosca = model.findOne(orden);
-    for (let index = 0; index < array.length; index++) {
-      const element = array[index];
-      //ir a metodo de cargar tareas
+    moment().format("YYYY/MM/DD");
+    const nuevaOti = new modelOti();
+    //fechas de la OTI
+    nuevaOti.fechaInicio = moment().format(req.body.fechaI);
+    nuevaOti.fechaFin = moment().format(req.body.fechaF);
+    const queryOrden = { _id: req.body.idOrden };
+
+    const orden = await modelOrdenProduccion.findOne(queryOrden);
+    const rosca = orden.rosca[0];
+    nuevaOti.rosca = rosca;
+
+    //sectores
+    for (let index = 0; index < req.body.sectores.length; index++) {
+      const element = req.body.sectores[index].nombre;
+      nuevaOti.sector.push(element);
     }
-    //ir a alta estado oti con estado = inializada
-    const res = await modelOti.create(data);
-    res.status(200).send(res);
+    console.log(nuevaOti.sector);
+    //tareas
+    for (let index = 0; index < req.body.tareas.length; index++) {
+      console.log(req.body.tareas[index]); 
+      const element = await altaTarea(req.body.tareas[index]);
+      console.log(element);
+      nuevaOti.tareas.push(element);
+    }
+
+    console.log("sali de los for, ya termine");
+    const data = {
+      fechaInicio: moment().format(req.body.fechaI),
+      fechaFin: moment().format(req.body.fechaF),
+      observacion: "creado correctamente",
+      tipoEstado: {
+        nombre: "inicializado",
+        descripcion: "se ha inicializado correctamente",
+      },
+    };
+
+    const est = await cargarEstado(data);
+    nuevaOti.estados.push(est);
+
+    const tt = await nuevaOti.save();
+
+    res.status(200).send(tt);
     //actualizar orden
-    const resOrden = await modelOrdenProduccion.findOneAndUpdate(orden, res);
+    const resOrden = await modelOrdenProduccion.findOneAndUpdate(
+      req.body.idOrden,
+      nuevaOti
+    );
     res.status(200).send(resOrden);
   } catch (error) {
     res.status(400).send(error);

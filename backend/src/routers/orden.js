@@ -25,6 +25,8 @@ router.post("/", async function (req, res) {
   let data = req.body;
   try {
     const resultInsert = await modelOrdenProduccion.create(data);
+    // Deberia llamar a un metodo que me cree una nueva rosca y mandarselo al metodo de altaOrdenProduccion?
+    // const resultInsert = await altaOrdenProduccion(data);
     res.json(resultInsert);
   } catch (error) {
     console.log(error);

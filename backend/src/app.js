@@ -18,11 +18,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/altaOti", altaOtiRoutes);
+app.use("/oti", altaOtiRoutes);
 app.use("/estado", estadoRoutes);
 app.use("/rosca", rosca);
-app.use('/tipoTarea', tareaRoutes);
-// app.use("/altaTarea", altaTareaRoutes);
-// app.use("/altaOrdenDeProduccion", altaOrdenDeProduccionRoutes);
-// app.use("/altaAsignarTareas", altaAsignarTareasRoutes);
-// app.use("/cambioDeEstado", cambioDeEstadoRoutes);
+app.use("/tarea", tareaRoutes);

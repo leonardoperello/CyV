@@ -1,8 +1,9 @@
-import { modelTipoDeEstado } from '../schemas/schemaTipoDeEstado';
-import { cargarEstado } from '../controllers/altaEstado.controllers';
+import { modelTipoDeEstado } from "../schemas/schemaTipoDeEstado";
+import { cargarEstado } from "../controllers/altaEstado.controllers";
 import { tareasAsignadas } from "../controllers/cambioDeEstadoOperario.controllers";
 import express from "express";
 const router = express.Router();
+
 
 router.get("/", async function (req, res) {
   try {
@@ -18,11 +19,9 @@ router.post("/", async function (req, res) {
     let data = req.body;
     const resultado = await cargarEstado(data);
     res.json(resultado);
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
   }
-
 });
 
 router.get("/:id", async function (req, res) {
@@ -44,6 +43,5 @@ router.put("/", async function (req, res) {
     console.log(error);
   }
 });
-
 
 export default router;

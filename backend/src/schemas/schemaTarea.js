@@ -1,7 +1,7 @@
-import { Schema, model } from 'mongoose';
-import { schemaTipoDeTarea } from './schemaTipoDeTarea';
-import { schemaSector } from './schemaSector';
-import { schemaEstado } from './schemaEstado';
+import { Schema, model } from "mongoose";
+import { schemaTipoDeTarea } from "./schemaTipoDeTarea";
+import { schemaSector } from "./schemaSector";
+import { schemaEstado } from "./schemaEstado";
 
 export const schemaTarea = new Schema({
 
@@ -15,6 +15,7 @@ export const schemaTarea = new Schema({
     idOperario: String,//este id se agrega cuando se asigna la tarea.
     estado: [schemaEstado],
 
+
 });
 
-export const modelTarea = model('tarea', schemaTarea, 'tarea');
+export const modelTarea = model("tarea", schemaTarea, "tarea");
