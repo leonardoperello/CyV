@@ -1,6 +1,6 @@
 import express from "express";
 import { modelOti } from "../schemas/schemaOti";
-import { altaTarea } from "../controllers/altaTarea";
+import { altaTarea } from "./altaTarea";
 import { cargarEstado } from "./altaEstado.controllers";
 import { modelOrdenProduccion } from "../schemas/schemaOrdenProduccion";
 import moment from "moment";
@@ -27,37 +27,34 @@ const getByID = async (req, res) => {
   }
 };
 
-const altaOti = async (req, res) => {
-  try {
+export async function altaOti(data) {
     moment().format("YYYY/MM/DD");
     const nuevaOti = new modelOti();
     //fechas de la OTI
-    nuevaOti.fechaInicio = moment().format(req.body.fechaI);
-    nuevaOti.fechaFin = moment().format(req.body.fechaF);
-    const queryOrden = { _id: req.body.idOrden };
+
+    nuevaOti.fechaInicio = moment().format(data.fechaI);
+    nuevaOti.fechaFin = moment().format(data.fechaF);
+    const queryOrden = { _id: data.idOrden };
 
     const orden = await modelOrdenProduccion.findOne(queryOrden);
     const rosca = orden.rosca[0];
     nuevaOti.rosca = rosca;
 
     //sectores
-    for (let index = 0; index < req.body.sectores.length; index++) {
-      const element = req.body.sectores[index].nombre;
+    for (let index = 0; index < data.sectores.length; index++) {
+      const element = data.sectores[index];
       nuevaOti.sector.push(element);
     }
-    console.log(nuevaOti.sector);
+
     //tareas
-    for (let index = 0; index < req.body.tareas.length; index++) {
-      console.log(req.body.tareas[index]); 
-      const element = await altaTarea(req.body.tareas[index]);
-      console.log(element);
+    for (let index = 0; index < data.tareas.length; index++) {
+      const element = await altaTarea(data.tareas[index]);
       nuevaOti.tareas.push(element);
     }
 
-    console.log("sali de los for, ya termine");
-    const data = {
-      fechaInicio: moment().format(req.body.fechaI),
-      fechaFin: moment().format(req.body.fechaF),
+      const dataEstado = {
+      fechaInicio: moment().format(data.fechaI),
+      fechaFin: moment().format(data.fechaF),
       observacion: "creado correctamente",
       tipoEstado: {
         nombre: "inicializado",
@@ -65,22 +62,18 @@ const altaOti = async (req, res) => {
       },
     };
 
-    const est = await cargarEstado(data);
+    const est = await cargarEstado(dataEstado);
     nuevaOti.estados.push(est);
-
+    
     const tt = await nuevaOti.save();
-
-    res.status(200).send(tt);
+    orden.oti = tt;
     //actualizar orden
     const resOrden = await modelOrdenProduccion.findOneAndUpdate(
-      req.body.idOrden,
-      nuevaOti
-    );
-    res.status(200).send(resOrden);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-};
+      queryOrden,
+      orden
+    );  
+    return tt;
+}
 
 const patchOti = async (req, res) => {
   try {
@@ -103,7 +96,6 @@ const deleteOti = async (req, res) => {
   }
 };
 
-export default { getOtis, getByID, altaOti, patchOti, deleteOti };
 
 /*
 router.createOti("/", async function (req, res) {

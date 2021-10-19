@@ -2,7 +2,7 @@ require("dotenv").config();
 import { app } from "./app.js";
 const mongoose = require("mongoose");
 
-const port = 8081;
+const port = 8080;
 
 mongoose.Promise = global.Promise;
 
@@ -13,7 +13,7 @@ mongoose
   .then(() => {
     console.log("conectado a la bd en mongoAtlas");
     app.listen(port, () => {
-      console.log("conectado al puerto 8081(listen)");
+      console.log("conectado al puerto 8080(listen)");
     });
   })
   .catch((err) => console.log(err));

@@ -4,6 +4,7 @@ import estadoRoutes from "./routers/estado";
 import altaOtiRoutes from "./routers/oti";
 import rosca from "./routers/rosca";
 import tareaRoutes from "./routers/tarea";
+import ordenRoutes from "./routers/orden";
 
 export const app = express();
 app.use(bodyParser.json());
@@ -23,3 +24,4 @@ app.use("/oti", altaOtiRoutes);
 app.use("/estado", estadoRoutes);
 app.use("/rosca", rosca);
 app.use("/tarea", tareaRoutes);
+app.use("/orden", ordenRoutes);
