@@ -1,5 +1,6 @@
 import express from "express";
 import { modelRosca } from "../schemas/schemaRosca";
+import { altaRosca } from "../controllers/altaRosca";
 const router = express.Router();
 
 router.get("/", async function (req, res) {
@@ -24,7 +25,7 @@ router.get("/:id", async function (req, res) {
 router.post("/", async function (req, res) {
   let data = req.body;
   try {
-    const resultado = await modelRosca.altaRosca(data);
+    const resultado = await altaRosca(data);
     res.status(200).send(resultado);
   } catch (error) {
     res.status(400).send(error);
