@@ -28,51 +28,51 @@ const getByID = async (req, res) => {
 };
 
 export async function altaOti(data) {
-    moment().format("YYYY/MM/DD");
-    const nuevaOti = new modelOti();
-    //fechas de la OTI
+  moment().format("YYYY/MM/DD");
+  const nuevaOti = new modelOti();
+  //fechas de la OTI
 
-    nuevaOti.fechaInicio = moment().format(data.fechaI);
-    nuevaOti.fechaFin = moment().format(data.fechaF);
-    const queryOrden = { _id: data.idOrden };
+  nuevaOti.fechaInicio = moment().format(data.fechaI);
+  nuevaOti.fechaFin = moment().format(data.fechaF);
+  const queryOrden = { _id: data.idOrden };
 
-    const orden = await modelOrdenProduccion.findOne(queryOrden);
-    const rosca = orden.rosca[0];
-    nuevaOti.rosca = rosca;
+  const orden = await modelOrdenProduccion.findOne(queryOrden);
+  const rosca = orden.rosca[0];
+  nuevaOti.rosca = rosca;
 
-    //sectores
-    for (let index = 0; index < data.sectores.length; index++) {
-      const element = data.sectores[index];
-      nuevaOti.sector.push(element);
-    }
+  //sectores
+  for (let index = 0; index < data.sectores.length; index++) {
+    const element = data.sectores[index];
+    nuevaOti.sector.push(element);
+  }
 
-    //tareas
-    for (let index = 0; index < data.tareas.length; index++) {
-      const element = await altaTarea(data.tareas[index]);
-      nuevaOti.tareas.push(element);
-    }
+  //tareas
+  for (let index = 0; index < data.tareas.length; index++) {
+    const element = await altaTarea(data.tareas[index]);
+    nuevaOti.tareas.push(element);
+  }
 
-      const dataEstado = {
-      fechaInicio: moment().format(data.fechaI),
-      fechaFin: moment().format(data.fechaF),
-      observacion: "creado correctamente",
-      tipoEstado: {
-        nombre: "inicializado",
-        descripcion: "se ha inicializado correctamente",
-      },
-    };
+  const dataEstado = {
+    fechaInicio: moment().format(data.fechaI),
+    fechaFin: moment().format(data.fechaF),
+    observacion: "creado correctamente",
+    tipoEstado: {
+      nombre: "inicializado",
+      descripcion: "se ha inicializado correctamente",
+    },
+  };
 
-    const est = await cargarEstado(dataEstado);
-    nuevaOti.estados.push(est);
-    
-    const tt = await nuevaOti.save();
-    orden.oti = tt;
-    //actualizar orden
-    const resOrden = await modelOrdenProduccion.findOneAndUpdate(
-      queryOrden,
-      orden
-    );  
-    return tt;
+  const est = await cargarEstado(dataEstado);
+  nuevaOti.estados.push(est);
+
+  const tt = await nuevaOti.save();
+  orden.oti = tt;
+  //actualizar orden
+  const resOrden = await modelOrdenProduccion.findOneAndUpdate(
+    queryOrden,
+    orden
+  );
+  return tt;
 }
 
 const patchOti = async (req, res) => {
@@ -95,7 +95,6 @@ const deleteOti = async (req, res) => {
     res.status(400).send(error);
   }
 };
-
 
 /*
 router.createOti("/", async function (req, res) {

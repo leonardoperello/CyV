@@ -25,34 +25,34 @@ const getByID = async (req, res) => {
 };
 
 export async function altaTarea(data) {
-    moment().format("YYYY/MM/DD");
-    const tarea = new modelTarea({
-      descripcion: data.descripcion,
-      nombre: data.nombre,
-      fechaInicio: moment().format(data.fechaI),
-      fechaFin: moment().format(data.fechaF),
-      numeroDeOrden: data.numero,
-      tipoDeTarea: data.tipoDeTarea,
-      sector: data.sector,
-      idOperario: "",
-      estado: [],
-    });
+  moment().format("YYYY/MM/DD");
+  const tarea = new modelTarea({
+    descripcion: data.descripcion,
+    nombre: data.nombre,
+    fechaInicio: moment().format(data.fechaI),
+    fechaFin: moment().format(data.fechaF),
+    numeroDeOrden: data.numero,
+    tipoDeTarea: data.tipoDeTarea,
+    sector: data.sector,
+    idOperario: "",
+    estado: [],
+  });
 
-    const dataTipo = {
-      fechaInicio: moment().format(data.fechaI),
-      fechaFin: moment().format(data.fechaF),
-      observacion: "creado correctamente",
-      tipoEstado: {
-        nombre: data.nombreEstado,
-        descripcion: data.descripcionEstado,
-      },
-    };
-    const nuevoEstado = await cargarEstado(dataTipo);
+  const dataTipo = {
+    fechaInicio: moment().format(data.fechaI),
+    fechaFin: moment().format(data.fechaF),
+    observacion: "creado correctamente",
+    tipoEstado: {
+      nombre: data.nombreEstado,
+      descripcion: data.descripcionEstado,
+    },
+  };
+  const nuevoEstado = await cargarEstado(dataTipo);
 
-    tarea.estado.push(nuevoEstado);
-    const tt = await tarea.save();
+  tarea.estado.push(nuevoEstado);
+  const tt = await tarea.save();
 
-    return tt;
+  return tt;
 }
 
 const patchTarea = async (req, res) => {
@@ -85,5 +85,3 @@ const putTarea = async (req, res) => {
     res.status(400).send(error);
   }
 };
-
-
