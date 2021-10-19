@@ -24,68 +24,36 @@ const getByID = async (req, res) => {
   }
 };
 
-const altaTarea = async (req, res) => {
-  try {
-    console.log("estoyu enm alta tarea");
-    console.log(req.body.descripcion);
-    moment().format("YYYY/MM/DD");
-    const tarea = new modelTarea({
-      descripcion: req.body.descripcion,
-      nombre: req.body.nombre,
-      fechaInicio: moment().format(req.body.fechaI),
-      fechaFin: moment().format(req.body.fechaF),
-      numeroDeOrden: req.body.numero,
-      tipoDeTarea: req.body.tipoDeTarea,
-      sector: req.body.sector,
-      idOperario: "",
-      estado: [],
-    });
+export async function altaTarea(data) {
+  moment().format("YYYY/MM/DD");
+  const tarea = new modelTarea({
+    descripcion: data.descripcion,
+    nombre: data.nombre,
+    fechaInicio: moment().format(data.fechaI),
+    fechaFin: moment().format(data.fechaF),
+    numeroDeOrden: data.numero,
+    tipoDeTarea: data.tipoDeTarea,
+    sector: data.sector,
+    idOperario: "",
+    estado: [],
+  });
 
-    const data = {
-      fechaInicio: moment().format(req.body.fechaI),
-      fechaFin: moment().format(req.body.fechaF),
-      observacion: "creado correctamente",
-      tipoEstado: {
-        nombre: req.body.nombreEstado,
-        descripcion: req.body.descripcionEstado,
-      },
-    };
-    const nuevoEstado = await cargarEstado(data);
-    //console.log(nuevoEstado);
-    tarea.estado.push(nuevoEstado);
-    const tt = await tarea.save();
+  const dataTipo = {
+    fechaInicio: moment().format(data.fechaI),
+    fechaFin: moment().format(data.fechaF),
+    observacion: "creado correctamente",
+    tipoEstado: {
+      nombre: data.nombreEstado,
+      descripcion: data.descripcionEstado,
+    },
+  };
+  const nuevoEstado = await cargarEstado(dataTipo);
 
-    res.status(200).send(tt);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-};
-/*
-    const nuevaTarea = {
-      descripcion: req.body.descripcion,
-      nombre: req.body.nombre,
-      fechaInicio: moment().format(req.body.fechaInicio),
-      fechaFin: moment().format(req.body.fechaFin),
-      numeroDeOrden: req.body.numeroDeOrden,
-      tipoDeTarea: req.body.tipoDeTarea,
-      sector: { nombre: req.body.sector, operario: {} },
-      operario: {},
-      estado: {
-        fechaInicio: moment().format(req.body.fechaInicioEs),
-        fechaFin: moment().format(req.body.fechaFinEs),
-        observacion: req.body.observacion,
-        tipoDeEstado: {
-          nombre: req.body.nombreTipo,
-          descripcion: req.body.descripcionTipo,
-        },
-      },
-    };
+  tarea.estado.push(nuevoEstado);
+  const tt = await tarea.save();
 
-    const res = await modelTarea.create(req.body);
-    res.status(200).send(res);
-  } catch (error) {
-    res.status(400).send(req.body);
-  }*/
+  return tt;
+}
 
 const patchTarea = async (req, res) => {
   try {
@@ -116,13 +84,4 @@ const putTarea = async (req, res) => {
   } catch (error) {
     res.status(400).send(error);
   }
-};
-
-export default {
-  getTareas,
-  getByID,
-  altaTarea,
-  patchTarea,
-  deleteTarea,
-  putTarea,
 };

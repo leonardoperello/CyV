@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { schemaRosca } from "./schemaRosca";
 import { schemaSupervisor } from "./schemaSupervisor";
 
 export const schemaOrdenProduccion = new Schema({
@@ -6,7 +7,7 @@ export const schemaOrdenProduccion = new Schema({
   fecha: String,
   supervisor: schemaSupervisor,
   oti: [],
-  rosca: [],
+  rosca: [schemaRosca],
 });
 
 export const modelOrdenProduccion = model(
