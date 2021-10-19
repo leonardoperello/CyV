@@ -3,6 +3,7 @@ import { schemaOperario } from './schemaOperario';
 
 export const schemaSector = new Schema({
     nombre: String,
+    activo: Boolean,
     operario: [schemaOperario],
 });
 

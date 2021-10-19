@@ -34,34 +34,73 @@ export async function tareasAsignadas(id_Operario) {
 
 //esto se podria resolver en el front y cambiar el estado y actualizar la oti.
 export async function cambioEstadotareaAsignada(data) {
+
     //mando la oti y el id de la tarea seleccionada.
     const queryOti = { _id: data.idOti };
     const queryTarea = { _id: data.idTarea };
     const oti = await modelOti.findOne(queryOti);
     const tarea = await modelTarea.findOne(queryTarea);
 
-    if (oti && tarea && data.estado === "detenida") {
+    if (oti && tarea && data.tipoEstado.nombre === "detenida") {//quiero pasar al estado detenida
 
-        if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "en progreso") {
+        if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "en progreso") {// contorlo que el estado anterior sea en progreso si no dejo al estado detenida
             const estado = await cargarEstado(data);
-            this.tarea.estado.push(estado);
+            tarea.estado.push(estado);
+            oti.estados.push(estado);// actualiza el estado de la oti a detenida
 
-            oti.tareas.find(tarea => {
-                if (tarea._id.equals(this.tarea)) {
-                    tarea.estado.push(estado);
+            oti.tareas.find(tareaOti => {// busco en la oti la tarea y actualizo el estato 
+                if (tareaOti._id.equals(tarea._id)) {
+                    tareaOti.estado.push(estado); // guardo el nuevo estado en tarea
                 }
             });
-            console.log(oti.tareas);
-            return modelOti.findOneAndUpdate(queryOti, oti);
+            return modelOti.findOneAndUpdate(queryOti, oti); //busco la oti y la actulizo
 
         }
 
         // crear el estado asiganarlo a la oti y actulizar oti .
 
     }
-    if (oti && tarea && data.estado === "abortada") {
+    if (oti && tarea && data.tipoEstado.nombre === "abortada") {
+
+        if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "en progreso" || tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "detenida") {// contorlo que el estado anterior sea en progreso si no dejo al estado detenida
+            const estado = await cargarEstado(data);
+            tarea.estado.push(estado);
+            oti.estados.push(estado);// actualiza el estado de la oti a detenida
+
+            oti.tareas.find(tareaOti => {// busco en la oti la tarea y actualizo el estato 
+                if (tareaOti._id.equals(tarea._id)) {
+                    tareaOti.estado.push(estado); // guardo el nuevo estado en tarea
+                }
+            });
+            return modelOti.findOneAndUpdate(queryOti, oti); //busco la oti y la actulizo
+
+        }
+
+
     }
-    if (oti && tarea && data.estado === "finalizada") {
+    if (oti && tarea && data.tipoEstado.nombre === "finalizada") {
+
+        if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "en progreso") {// contorlo que el estado anterior sea en progreso si no dejo al estado detenida
+            const estado = await cargarEstado(data);
+            tarea.estado.push(estado);
+            const ultimatarea = oti.tareas[oti.tareas.length - 1];
+            if (ultimatarea._id.equals(tarea._id)) {
+                oti.estados.push(estado);// actualiza el estado de la oti a finalizada si finalizaron todas las tareas. 
+                //termino oti   
+            } else {
+
+            }
+
+
+            oti.tareas.find(tareaOti => {// busco en la oti la tarea y actualizo el estato 
+                if (tareaOti._id.equals(tarea._id)) {
+                    tareaOti.estado.push(estado); // guardo el nuevo estado en tarea
+                }
+            });
+            return modelOti.findOneAndUpdate(queryOti, oti); //busco la oti y la actulizo
+
+        }
+
     }
     if (oti && tarea && data.estado === "en progreso") {
     }
