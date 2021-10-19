@@ -57,7 +57,7 @@ export async function altaOti(data) {
     fechaFin: moment().format(data.fechaF),
     observacion: "creado correctamente",
     tipoEstado: {
-      nombre: "inicializado",
+      nombre: "iniciada",
       descripcion: "se ha inicializado correctamente",
     },
   };
