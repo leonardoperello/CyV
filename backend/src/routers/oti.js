@@ -1,5 +1,9 @@
 import express from "express";
-import otiController, { altaOti } from "../controllers/altaOti";
+import otiController, {
+  altaOti,
+  buscarOrdenes,
+  buscarRoscas,
+} from "../controllers/altaOti";
 import { modelOti } from "../schemas/schemaOti";
 
 const router = new express.Router();
@@ -48,6 +52,26 @@ router.delete("/:id", async function (req, res) {
   try {
     const id = req.params.id;
     const resultado = await modelOti.deleteOne({ _id: id });
+    res.status(200).send(resultado);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+router.get("/obtenerOrdenes/:fecha", async function (req, res) {
+  try {
+    let data = req.params.fecha;
+    const resultado = await buscarOrdenes(data);
+    res.status(200).send(resultado);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+router.get("/obtenerRoscas/:idOrden", async function (req, res) {
+  try {
+    let data = req.params.idOrden;
+    const resultado = await buscarRoscas(data);
     res.status(200).send(resultado);
   } catch (error) {
     res.status(400).send(error);

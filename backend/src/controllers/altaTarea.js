@@ -50,9 +50,9 @@ export async function altaTarea(data) {
   const nuevoEstado = await cargarEstado(dataTipo);
 
   tarea.estado.push(nuevoEstado);
-  const tt = await tarea.save();
+  const altaTarea = await tarea.save();
 
-  return tt;
+  return altaTarea;
 }
 
 const patchTarea = async (req, res) => {

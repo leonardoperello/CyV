@@ -75,6 +75,56 @@ export async function altaOti(data) {
   return tt;
 }
 
+export async function buscarOrdenes(data) {
+  const queryOrden = { fecha: data };
+  const ordenes = await modelOrdenProduccion.find(queryOrden);
+  if (ordenes) {
+    const ordenesResult = [];
+    for (let index = 0; index < ordenes.length; index++) {
+      const orden = ordenes[index];
+      const id = orden._id;
+      const fecha = orden.fecha;
+      const detalle = orden.detalle;
+      const rosca = orden.rosca;
+      const result = {
+        id,
+        fecha,
+        detalle,
+        rosca,
+      };
+      ordenesResult.push(result);
+    }
+    return JSON.stringify(ordenesResult);
+  } else {
+    return "No se encuentran ordenes en esa fecha";
+  }
+}
+
+export async function buscarRoscas(data) {
+  const queryOrden = { _id: data };
+  const orden = await modelOrdenProduccion.findOne(queryOrden);
+  const roscas = orden.rosca;
+  if (roscas) {
+    const roscasResult = [];
+    for (let index = 0; index < roscas.length; index++) {
+      const rosca = roscas[index];
+      const id = rosca._id;
+      const descripcionTecnica = rosca.descripcionTecnica;
+      const medida = rosca.medida;
+      const tipoDeRosca = rosca.tipoDeRosca;
+      const result = {
+        id,
+        descripcionTecnica,
+        medida,
+        tipoDeRosca,
+      };
+      roscasResult.push(result);
+    }
+    return JSON.stringify(roscasResult);
+  } else {
+    return "Error buscando roscas de una orden de producción";
+  }
+}
 const patchOti = async (req, res) => {
   try {
     const oti = req.params.otiID;
