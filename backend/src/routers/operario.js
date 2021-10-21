@@ -21,6 +21,16 @@ router.get("/:id", async function (req, res) {
   }
 });
 
+router.get("operarioSector/:nombre", async function (req, res) {
+  try {
+    const nombre = req.params.nombre;
+    const result = await modelOperario.findOne({ nombre: nombre });
+    res.json(result);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 router.post("/", async function (req, res) {
   let data = req.body;
   try {

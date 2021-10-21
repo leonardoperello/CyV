@@ -3,16 +3,15 @@ import { modelOti } from '../schemas/schemaOti';
 import { modelTarea } from '../schemas/schemaTarea';
 
 export async function obtenerTareas(data) {
-    const otis = await modelOti.find();
-    const arre = otis.filter((oti) => oti.estados[oti.estados.length - 1]?.tipoEstado?.nombre === "inicializada" || oti.estados[oti.estados.length - 1]?.tipoEstado?.nombre === "en progreso");
-    if (arre.length) {
-        // const arre2;
-        for (let i = 0; i < arre.length; i++) {
-
-            const arre2 = arre.tareas.filter((tarea) => tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "iniciada" || tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "detenida");
-            console.log(arre2);
+    const tareasFiltradas = null;
+    const otis = await modelOti.find({ 'sector.nombre': data });
+    const otisFiltradas = otis.filter((oti) => oti.estados[oti.estados.length - 1]?.tipoEstado?.nombre === "inicializada" || oti.estados[oti.estados.length - 1]?.tipoEstado?.nombre === "en progreso");
+    if (otisFiltradas.length) {
+        for (let i = 0; i < otisFiltradas; i++) {
+            tareasFiltradas = otisFiltradas[i].tareas.filter((tarea) => tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "iniciada" || tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "detenida");
         }
     }
+    return tareasFiltradas;
 }
 
 export async function verificarEstadoTarea(data) {

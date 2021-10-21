@@ -34,7 +34,7 @@ export async function altaTarea(data) {
     numeroDeOrden: data.numero,
     tipoDeTarea: data.tipoDeTarea,
     sector: data.sector,
-    idOperario: "",
+    idOperario: data.idOperario,
     estado: [],
   });
 

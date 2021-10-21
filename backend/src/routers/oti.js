@@ -39,10 +39,8 @@ router.get("/:id", async function (req, res) {
 
 router.patch("/:id", async function (req, res) {
   try {
-    let oti = { _id: req.params.id };
-    let data = req.body;
-    const resultado = await modelOti.findOneAndUpdate(oti, data);
-    res.status(200).send(resultado);
+    await verificarEstadoOti(req.params); //
+    res.status(200).send('OK');
   } catch (error) {
     res.status(400).send(error);
   }
