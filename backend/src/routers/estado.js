@@ -10,7 +10,7 @@ router.get("/", async function (req, res) {
     const result = await modelTipoDeEstado.find({});
     res.json(result);
   } catch (error) {
-    console.log(error);
+    res.status(422).send('Error, no existe la coleccion');
   }
 });
 
@@ -20,7 +20,7 @@ router.post("/", async function (req, res) {
     const resultado = await cargarEstado(data);
     res.json(resultado);
   } catch (error) {
-    console.log(error);
+    res.status(404).send('Error, parámetros incorrectos.');
   }
 });
 
@@ -30,7 +30,7 @@ router.get("/:id", async function (req, res) {
     const result = await tareasAsignadas(id);
     res.json(result);
   } catch (error) {
-    console.log(error);
+    res.status(404).send('Error, parámetros incorrectos.');
   }
 });
 
@@ -40,7 +40,7 @@ router.put("/", async function (req, res) {
     const resultado = await cambioEstadotareaAsignada(data);
     res.json(resultado);
   } catch (error) {
-    console.log(error);
+    res.status(404).send('Error, parámetros incorrectos.');
   }
 });
 
