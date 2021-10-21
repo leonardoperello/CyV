@@ -1,12 +1,10 @@
 import express from "express";
-import { altaTarea } from "../controllers/altaTarea";
-import { obtenerTareas, verificarEstadoTarea } from "../controllers/altaAsignarTareas";
-import { modelTarea } from "../schemas/schemaTarea";
+import { modelSector } from "../schemas/schemaSector";
 const router = new express.Router();
 
 router.get("/", async function (req, res) {
     try {
-        const result = await modelTarea.find({});
+        const result = await modelSector.find({});
         res.json(result);
     } catch (error) {
         console.log(error);
@@ -14,18 +12,18 @@ router.get("/", async function (req, res) {
 });
 
 router.post("/", async function (req, res) {
+    let data = req.body;
     try {
-        let data = req.body;
-        const resultado = await altaTarea(data);
+        const resultInsert = await modelSector.create(data);
         res.status(200).send(resultado);
     } catch (error) {
         res.status(400).send(error);
     }
 });
-router.get("/:id", async function (req, res) {
+router.get("/:nombre", async function (req, res) {
     try {
-        const id = req.params.id;
-        const resultado = await modelTarea.findOne({ _id: id });
+        const nombre = req.params.nombre;
+        const resultado = await modelSector.find({ 'operarios.nombre': nombre });
         res.status(200).send(resultado);
     } catch (error) {
         res.status(400).send(error);
@@ -34,8 +32,10 @@ router.get("/:id", async function (req, res) {
 
 router.patch("/:id", async function (req, res) {
     try {
-        await verificarEstadoTarea(req.params);
-        res.status(200).send('OK');
+        let tarea = { _id: req.params.id };
+        let data = req.body;
+        const resultado = await modelSector.findOneAndUpdate(tarea, data);
+        res.status(200).send(resultado);
     } catch (error) {
         res.status(400).send(error);
     }
@@ -44,16 +44,11 @@ router.patch("/:id", async function (req, res) {
 router.delete("/:id", async function (req, res) {
     try {
         const id = req.params.id;
-        const resultado = await modelTarea.deleteOne({ _id: id });
+        const resultado = await modelSector.deleteOne({ _id: id });
         res.status(200).send(resultado);
     } catch (error) {
         res.status(400).send(error);
     }
 });
-
-router.get("/obtener/:nombre", async (req, res, next) => {
-    return await obtenerTareas(req.params.nombre);
-});
-
 
 export default router;
