@@ -3,6 +3,7 @@ import { modelOti } from "../schemas/schemaOti";
 import { altaTarea } from "./altaTarea";
 import { cargarEstado } from "./altaEstado.controllers";
 import { modelOrdenProduccion } from "../schemas/schemaOrdenProduccion";
+import { modelSector } from "../schemas/schemaSector";
 import moment from "moment";
 
 const router = express.Router();
@@ -125,6 +126,18 @@ export async function buscarRoscas(data) {
     return "Error buscando roscas de una orden de producción";
   }
 }
+
+export async function buscarSectores(data) {
+  const sectores = await modelSector.find();
+  console.log("llego aca");
+  return sectores;
+}
+
+export async function cargarTareasOti() {
+  const tareas = "asd";
+  return tareas;
+}
+
 const patchOti = async (req, res) => {
   try {
     const oti = req.params.otiID;
