@@ -5,7 +5,7 @@ const router = express.Router();
 router.get("/", async function (req, res) {
   try {
     const result = await modelSupervisor.find({});
-    res.json(result.reverse());
+    res.json(result);
   } catch (error) {
     console.log(error);
   }

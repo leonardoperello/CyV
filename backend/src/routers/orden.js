@@ -1,5 +1,6 @@
 import express from "express";
 import { modelOrdenProduccion } from "../schemas/schemaOrdenProduccion";
+import { altaOrdenProduccion } from "../controllers/altaOrden";
 const router = express.Router();
 
 router.get("/", async function (req, res) {
@@ -21,12 +22,10 @@ router.get("/:id", async function (req, res) {
   }
 });
 
-router.post("/", async function (req, res) {
+router.post("/crearOrdenProduccion", async function (req, res) {
   let data = req.body;
   try {
-    const resultInsert = await modelOrdenProduccion.create(data);
-    // Deberia llamar a un metodo que me cree una nueva rosca y mandarselo al metodo de altaOrdenProduccion?
-    // const resultInsert = await altaOrdenProduccion(data);
+    const resultInsert = await altaOrdenProduccion(data);
     res.json(resultInsert);
   } catch (error) {
     console.log(error);

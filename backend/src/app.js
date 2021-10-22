@@ -5,8 +5,9 @@ import altaOtiRoutes from "./routers/oti";
 import rosca from "./routers/rosca";
 import tareaRoutes from "./routers/tarea";
 import ordenRoutes from "./routers/orden";
-
-
+import sectorRoutes from "./routers/sector";
+import clienteRoutes from "./routers/cliente";
+import supervisorRoutes from "./routers/supervisor";
 export const app = express();
 app.use(bodyParser.json());
 //cors
@@ -26,3 +27,6 @@ app.use("/estado", estadoRoutes);
 app.use("/rosca", rosca);
 app.use("/tarea", tareaRoutes);
 app.use("/orden", ordenRoutes);
+app.use("/sector", sectorRoutes);
+app.use("/cliente", clienteRoutes);
+app.use("/supervisor", supervisorRoutes);

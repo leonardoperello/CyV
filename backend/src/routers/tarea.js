@@ -1,22 +1,32 @@
 import express from "express";
 import { altaTarea } from "../controllers/altaTarea";
-import { obtenerTareas, verificarEstadoTarea } from "../controllers/altaAsignarTareas";
+import { obtenerTareas, obtenerOtisDelSector, verificarEstadoTarea, asignarTareaOperario } from "../controllers/altaAsignarTareas";
 import { modelTarea } from "../schemas/schemaTarea";
 const router = new express.Router();
 
-router.get("/", async function (req, res) {
+router.get("/obtenerOtis", async function (req, res) {
     try {
-        const result = await modelTarea.find({});
+        const idSector = req.query.id;
+        const result = await obtenerOtisDelSector(idSector);
         res.json(result);
     } catch (error) {
         console.log(error);
     }
 });
 
-router.post("/", async function (req, res) {
+router.get("/obtenerTareas", async function (req, res) {
+    try {
+        const idOti = req.query.id;
+        const result = await obtenerTareas(idOti);
+        res.json(result);
+    } catch (error) {
+        console.log(error);
+    }
+});
+router.post("/asignarTarea", async function (req, res) {
     try {
         let data = req.body;
-        const resultado = await altaTarea(data);
+        const resultado = await asignarTareaOperario(data);
         res.status(200).send(resultado);
     } catch (error) {
         res.status(400).send(error);
@@ -24,8 +34,9 @@ router.post("/", async function (req, res) {
 });
 router.get("/:id", async function (req, res) {
     try {
-        const id = req.params.id;
-        const resultado = await modelTarea.findOne({ _id: id });
+        console.log(req.params)
+
+        const resultado = await obtenerOtisDelSector(id);
         res.status(200).send(resultado);
     } catch (error) {
         res.status(400).send(error);

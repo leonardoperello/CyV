@@ -11,4 +11,4 @@ export const schemaCliente = new Schema({
     ordenProduccion: []
 });
 
-export const modelCliente = model('cliente', schemaCliente, 'cliente');
+export const modelCliente = model('clientes', schemaCliente, 'clientes');

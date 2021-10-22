@@ -50,7 +50,7 @@ export async function cambioEstadotareaAsignada(data) {
 
     if (oti && tarea && (data.tipoEstado.nombre === "detenida" || data.tipoEstado.nombre === "abortada")) {//quiero pasar al estado detenida
 
-        if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "en progreso" && oti.estados[oti.estados.length - 1] === "en progreso") {// contorlo que el estado anterior sea en progreso si no retorna vacio.
+        if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "en progreso" && oti.estados[oti.estados.length - 1].tipoEstado?.nombre === "en progreso") {// contorlo que el estado anterior sea en progreso si no retorna vacio.
             const estado = await cargarEstado(data);
             tarea.estado.push(estado); //actualizo el esta de la tarea a detenida o abortada
             oti.estados.push(estado);// actualiza el estado de la oti a detenida o abortada

@@ -5,7 +5,7 @@ export async function cargarEstado(data) {
   const estado = {
     fechaInicio: moment().format(data.fechaInicio),
     fechaFin: data.fechaFin ? moment().format(data.fechaFin) : null,
-    observacion: data.observacion,
+    observacion: data.observacion ? data.observacion : '',
     tipoEstado: data.tipoEstado,
   };
 
