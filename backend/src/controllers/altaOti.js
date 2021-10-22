@@ -3,6 +3,7 @@ import { modelOti } from "../schemas/schemaOti";
 import { altaTarea } from "./altaTarea";
 import { cargarEstado } from "./altaEstado.controllers";
 import { modelOrdenProduccion } from "../schemas/schemaOrdenProduccion";
+import { modelSector } from "../schemas/schemaSector";
 import moment from "moment";
 
 const router = express.Router();
@@ -125,6 +126,18 @@ export async function buscarRoscas(data) {
     return "Error buscando roscas de una orden de producción";
   }
 }
+
+export async function buscarSectores(data) {
+  const sectores = await modelSector.find();
+  console.log("llego aca");
+  return sectores;
+}
+
+export async function cargarTareasOti() {
+  const tareas = "asd";
+  return tareas;
+}
+
 const patchOti = async (req, res) => {
   try {
     const oti = req.params.otiID;
@@ -147,9 +160,12 @@ const deleteOti = async (req, res) => {
 };
 
 export async function verificarEstadoOti(data) {
-  const queryOti = { _id: data.idOti }
+  const queryOti = { _id: data.idOti };
   const oti = await modelOti.findOne(queryOti);
-  if (oti.estados[oti.estados.length - 1].tipoDeEstado.nombre === "iniciada" || oti.estados[oti.estados.length - 1].tipoDeEstado.nombre === "detenida") {
+  if (
+    oti.estados[oti.estados.length - 1].tipoDeEstado.nombre === "iniciada" ||
+    oti.estados[oti.estados.length - 1].tipoDeEstado.nombre === "detenida"
+  ) {
     oti.estados[oti.estados.length - 1].tipoDeEstado.nombre === "en progreso";
   }
 }

@@ -1,10 +1,12 @@
 import express from "express";
-import otiController, {
+import {
   altaOti,
   buscarOrdenes,
   buscarRoscas,
+  buscarSectores,
 } from "../controllers/altaOti";
 import { modelOti } from "../schemas/schemaOti";
+import { modelSector } from "../schemas/schemaSector";
 
 const router = new express.Router();
 
@@ -40,7 +42,7 @@ router.get("/:id", async function (req, res) {
 router.patch("/:id", async function (req, res) {
   try {
     await verificarEstadoOti(req.params); //
-    res.status(200).send('OK');
+    res.status(200).send("OK");
   } catch (error) {
     res.status(400).send(error);
   }
@@ -70,6 +72,17 @@ router.get("/obtenerRoscas/:idOrden", async function (req, res) {
   try {
     let data = req.params.idOrden;
     const resultado = await buscarRoscas(data);
+    res.status(200).send(resultado);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+router.get("/obtenerSectores", async function (req, res) {
+  try {
+    let data;// = req.params.idOrden;
+    console.log("estoy en la ruta");
+    const resultado = await modelSector.find(data);
     res.status(200).send(resultado);
   } catch (error) {
     res.status(400).send(error);

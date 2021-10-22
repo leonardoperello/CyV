@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import estadoRoutes from "./routers/estado";
-import altaOtiRoutes from "./routers/oti";
+import otiRoutes from "./routers/oti";
 import rosca from "./routers/rosca";
 import tareaRoutes from "./routers/tarea";
 import ordenRoutes from "./routers/orden";
@@ -22,7 +22,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/oti", altaOtiRoutes);
+app.use("/oti", otiRoutes);
 app.use("/estado", estadoRoutes);
 app.use("/rosca", rosca);
 app.use("/tarea", tareaRoutes);
