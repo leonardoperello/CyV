@@ -40,7 +40,7 @@ router.get("/:id", async function (req, res) {
 router.patch("/:id", async function (req, res) {
   try {
     await verificarEstadoOti(req.params); //
-    res.status(200).send('OK');
+    res.status(200).send("OK");
   } catch (error) {
     res.status(400).send(error);
   }

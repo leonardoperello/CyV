@@ -147,9 +147,12 @@ const deleteOti = async (req, res) => {
 };
 
 export async function verificarEstadoOti(data) {
-  const queryOti = { _id: data.idOti }
+  const queryOti = { _id: data.idOti };
   const oti = await modelOti.findOne(queryOti);
-  if (oti.estados[oti.estados.length - 1].tipoDeEstado.nombre === "iniciada" || oti.estados[oti.estados.length - 1].tipoDeEstado.nombre === "detenida") {
+  if (
+    oti.estados[oti.estados.length - 1].tipoDeEstado.nombre === "iniciada" ||
+    oti.estados[oti.estados.length - 1].tipoDeEstado.nombre === "detenida"
+  ) {
     oti.estados[oti.estados.length - 1].tipoDeEstado.nombre === "en progreso";
   }
 }
