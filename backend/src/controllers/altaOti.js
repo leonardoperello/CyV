@@ -75,9 +75,25 @@ export async function actualizarOrden(data) {
   const oti = await modelOti.findOne(idOti);
   const idOrden = { _id: data.idOrden };
   const orden = await modelOti.findOne(idOrden);
-  const long = oti.sector.length;
+  const longS = oti.sector.length;
+  const longT = oti.tareas.length;
   const result = "";
-  if (oti.sector[long - 1].nombre === "deposito") {
+  if (
+    oti.sector[longS - 1].nombre === "deposito" &&
+    oti.tareas[longT - 1] !== null
+  ) {
+    const dataEstado = {
+      fechaInicio: moment().format(data.fechaI),
+      fechaFin: moment().format(data.fechaF),
+      observacion: "creado correctamente",
+      tipoEstado: {
+        nombre: "iniciada",
+        descripcion: "se ha inicializado correctamente",
+      },
+    };
+
+    const est = await cargarEstado(dataEstado);
+    oti.estados.push(est);
     orden.oti = oti;
     result = await modelOrdenProduccion.findOneAndUpdate(idOrden, orden);
   } else {
