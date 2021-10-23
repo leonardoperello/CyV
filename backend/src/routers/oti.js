@@ -6,6 +6,7 @@ import {
   buscarSectores,
   cargarDatosBasicos,
   cargarSectorYTareas,
+  actualizarOrden,
 } from "../controllers/altaOti";
 import { modelOti } from "../schemas/schemaOti";
 
@@ -81,6 +82,16 @@ router.put("/sectoresYTareas", async function (req, res) {
   try {
     let data = req.body;
     const resultado = await cargarSectorYTareas(data);
+    res.status(200).send(resultado);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+router.put("/actualizarOrden", async function (req, res) {
+  try {
+    let data = req.body;
+    const resultado = await actualizarOrden(data);
     res.status(200).send(resultado);
   } catch (error) {
     res.status(400).send(error);

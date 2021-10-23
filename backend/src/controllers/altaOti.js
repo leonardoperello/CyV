@@ -70,6 +70,22 @@ export async function cargarSectorYTareas(data) {
   return "actualización correcta" + result;
 }
 
+export async function actualizarOrden(data) {
+  const idOti = { _id: data.idOti };
+  const oti = await modelOti.findOne(idOti);
+  const idOrden = { _id: data.idOrden };
+  const orden = await modelOti.findOne(idOrden);
+  const long = oti.sector.length;
+  const result = "";
+  if (oti.sector[long - 1].nombre === "deposito") {
+    orden.oti = oti;
+    result = await modelOrdenProduccion.findOneAndUpdate(idOrden, orden);
+  } else {
+    result = "La OTI todavía no cargo todas las tareas de todos los sectores";
+  }
+  return result;
+}
+
 export async function altaOti(data) {
   moment().format("YYYY/MM/DD");
   const nuevaOti = new modelOti();
