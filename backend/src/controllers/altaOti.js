@@ -4,6 +4,7 @@ import { altaTarea } from "./altaTarea";
 import { cargarEstado } from "./altaEstado.controllers";
 import { modelOrdenProduccion } from "../schemas/schemaOrdenProduccion";
 import { modelSector } from "../schemas/schemaSector";
+import { modelRosca } from "../schemas/schemaRosca";
 import moment from "moment";
 
 const router = express.Router();
@@ -19,7 +20,6 @@ const getOtis = async (req, res) => {
 
 const getByID = async (req, res) => {
   try {
-    //const oti = await modelOti.findById(req.params.id);
     const id = req.params.id;
     const oti = await modelOti.findOne({ _id: id });
     res.status(200).send(oti);
@@ -27,6 +27,48 @@ const getByID = async (req, res) => {
     res.status(400).send(error);
   }
 };
+
+export async function cargarDatosBasicos(data) {
+  moment().format("YYYY/MM/DD");
+  const oti = new modelOti();
+  //fechas de la OTI
+
+  oti.fechaInicio = moment().format(data.fechaI);
+  oti.fechaFin = moment().format(data.fechaF);
+
+  oti.rosca = data.rosca;
+  oti.sector = [];
+  oti.tareas = [];
+  oti.estados = [];
+
+  const nuevaOti = await oti.save();
+
+  return nuevaOti._id;
+}
+
+export async function cargarSectorYTareas(data) {
+  const idOti = { _id: data.id };
+  const oti = await modelOti.findOne(idOti);
+  oti.sector.push(data.sector);
+
+  for (let index = 0; index < data.tareas.length; index++) {
+    //hacer control de que sea el mismo sector que el sector y que el orden este bien
+    if (data.tareas[index].sector.nombre === data.sector.nombre) {
+      const element = await altaTarea(data.tareas[index]);
+      oti.tareas.push(element);
+    } else {
+      console.log(
+        "El sector no corresponde con la tarea que se quiere agregar"
+      );
+    }
+  }
+
+  const result = await modelOti.findOneAndUpdate(idOti, oti);
+
+  //si es la última tarea del sector deposito deberia actualizar la orden de produccion y finalizar
+
+  return "actualización correcta" + result;
+}
 
 export async function altaOti(data) {
   moment().format("YYYY/MM/DD");
@@ -127,37 +169,11 @@ export async function buscarRoscas(data) {
   }
 }
 
-export async function buscarSectores(data) {
-  const sectores = await modelSector.find();
+export async function buscarSectores() {
+  const sectores = await modelSector.find({});
   console.log("llego aca");
   return sectores;
 }
-
-export async function cargarTareasOti() {
-  const tareas = "asd";
-  return tareas;
-}
-
-const patchOti = async (req, res) => {
-  try {
-    const oti = req.params.otiID;
-    let data = req.body;
-    const result = await modelOti.findOneAndUpdate(oti, data);
-    res.status(200).send(result);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-};
-
-const deleteOti = async (req, res) => {
-  try {
-    const id = req.params.otiID;
-    const result = await modelOti.deleteOne({ _id: id });
-    res.status(200).send(result);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-};
 
 export async function verificarEstadoOti(data) {
   const queryOti = { _id: data.idOti };
