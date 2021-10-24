@@ -24,14 +24,14 @@ const getByID = async (req, res) => {
   }
 };
 
-export async function altaTarea(data) {
+export async function altaTarea(data, numeroOrden) {
   moment().format("YYYY/MM/DD");
   const tarea = new modelTarea({
     descripcion: data.descripcion,
     nombre: data.nombre,
     fechaInicio: moment().format(data.fechaI),
     fechaFin: moment().format(data.fechaF),
-    numeroDeOrden: data.numero,
+    numeroDeOrden: numeroOrden,
     tipoDeTarea: data.tipoDeTarea,
     sector: data.sector,
     idOperario: data.idOperario,
@@ -40,7 +40,7 @@ export async function altaTarea(data) {
 
   const dataTipo = {
     fechaInicio: moment().format(data.fechaI),
-    fechaFin: moment().format(data.fechaF),
+    fechaFin: data.fechaF ? moment(data.fechaF) : null,
     observacion: "creado correctamente",
     tipoEstado: {
       nombre: data.nombreEstado,

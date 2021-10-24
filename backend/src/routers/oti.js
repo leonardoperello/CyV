@@ -25,7 +25,6 @@ router.get("/", async function (req, res) {
 //getSectores
 router.get("/sectores", async function (req, res) {
   try {
-    console.log("estoy en la ruta");
     const resultado = await buscarSectores();
     res.status(200).send(resultado);
   } catch (error) {

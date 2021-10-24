@@ -32,70 +32,76 @@ export async function cargarDatosBasicos(data) {
   moment().format("YYYY/MM/DD");
   const oti = new modelOti();
   //fechas de la OTI
-
+  // la fecha de fin no la sabemos por lo que queda null
   oti.fechaInicio = moment().format(data.fechaI);
-  oti.fechaFin = moment().format(data.fechaF);
-
+  oti.fechaFin = data.fechaF ? moment(data.fechaF) : null;
   oti.rosca = data.rosca;
   oti.sector = [];
   oti.tareas = [];
   oti.estados = [];
 
   const nuevaOti = await oti.save();
-
-  return nuevaOti._id;
+  const res = "El id de la nueva OTI es: " + nuevaOti._id;
+  return res;
 }
 
 export async function cargarSectorYTareas(data) {
   const idOti = { _id: data.id };
   const oti = await modelOti.findOne(idOti);
-  oti.sector.push(data.sector);
-
-  for (let index = 0; index < data.tareas.length; index++) {
-    //hacer control de que sea el mismo sector que el sector y que el orden este bien
-    if (data.tareas[index].sector.nombre === data.sector.nombre) {
-      const element = await altaTarea(data.tareas[index]);
-      oti.tareas.push(element);
-    } else {
-      console.log(
-        "El sector no corresponde con la tarea que se quiere agregar"
-      );
+  const resultado = "";
+  // la idea es que si el sector ya esta dentro de la oti no te deje agregarlo de nuevo
+  if (oti.sector.nombre !== data.sector.nombre) {
+    oti.sector.push(data.sector);
+    // el numero de orden va estar determinado por la posición de la tarea en el arreglo pasado en data
+    const numeroOrden = oti.tareas.length;
+    for (let index = 0; index < data.tareas.length; index++) {
+      //hacer control de que sea el mismo sector que el sector y que el orden este bien
+      if (data.tareas[index].sector.nombre === data.sector.nombre) {
+        const element = await altaTarea(
+          data.tareas[index],
+          numeroOrden + index + 1
+        );
+        oti.tareas.push(element);
+      } else {
+        resultado =
+          "El sector no corresponde con la tarea que se quiere agregar";
+      }
     }
+  } else {
+    resultado = "El sector " + data.sector.nombre + " ya esta dentro de la OTI";
   }
 
-  const result = await modelOti.findOneAndUpdate(idOti, oti);
+  await modelOti.findOneAndUpdate(idOti, oti);
 
-  //si es la última tarea del sector deposito deberia actualizar la orden de produccion y finalizar
-
-  return "actualización correcta" + result;
+  return "actualización correcta" + resultado;
 }
 
 export async function actualizarOrden(data) {
   const idOti = { _id: data.idOti };
   const oti = await modelOti.findOne(idOti);
   const idOrden = { _id: data.idOrden };
-  const orden = await modelOti.findOne(idOrden);
+  const orden = await modelOrdenProduccion.findOne(idOrden);
   const longS = oti.sector.length;
   const longT = oti.tareas.length;
   const result = "";
-  if (
-    oti.sector[longS - 1].nombre === "deposito" &&
-    oti.tareas[longT - 1] !== null
-  ) {
+  // solo vamos a poder actualizar la orden con la oti
+  // cuando se haya cargado el último sector y sus tareas
+  // que es el deposito
+  if (oti.sector[longS - 1].nombre === "deposito" && longT > 1) {
     const dataEstado = {
       fechaInicio: moment().format(data.fechaI),
-      fechaFin: moment().format(data.fechaF),
+      fechaFin: data.fechaF ? moment(data.fechaF) : null,
       observacion: "creado correctamente",
       tipoEstado: {
         nombre: "iniciada",
         descripcion: "se ha inicializado correctamente",
       },
     };
-
     const est = await cargarEstado(dataEstado);
     oti.estados.push(est);
-    orden.oti = oti;
-    result = await modelOrdenProduccion.findOneAndUpdate(idOrden, orden);
+    orden.oti.push(oti);
+    await modelOrdenProduccion.findOneAndUpdate(idOrden, orden);
+    result = "actualización finalizada ";
   } else {
     result = "La OTI todavía no cargo todas las tareas de todos los sectores";
   }
@@ -203,7 +209,6 @@ export async function buscarRoscas(data) {
 
 export async function buscarSectores() {
   const sectores = await modelSector.find({});
-  console.log("llego aca");
   return sectores;
 }
 
