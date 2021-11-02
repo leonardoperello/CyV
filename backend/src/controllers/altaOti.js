@@ -100,6 +100,7 @@ export async function actualizarOrden(data) {
     const est = await cargarEstado(dataEstado);
     oti.estados.push(est);
     orden.oti.push(oti);
+    
     await modelOrdenProduccion.findOneAndUpdate(idOrden, orden);
     result = "actualización finalizada ";
   } else {
