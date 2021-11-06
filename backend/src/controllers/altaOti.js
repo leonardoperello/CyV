@@ -176,7 +176,7 @@ export async function buscarOrdenes(data) {
       };
       ordenesResult.push(result);
     }
-    return JSON.stringify(ordenesResult);
+    return ordenesResult;
   } else {
     return "No se encuentran ordenes en esa fecha";
   }
