@@ -5,7 +5,7 @@ import express from "express";
 const router = express.Router();
 
 
-router.get("/", async function (req, res) {
+router.get("/tipoEstado", async function (req, res) {
   try {
     const result = await modelTipoDeEstado.find({});
     res.json(result);
