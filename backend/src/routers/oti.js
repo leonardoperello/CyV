@@ -9,6 +9,7 @@ import {
   actualizarOrden,
 } from "../controllers/altaOti";
 import { modelOti } from "../schemas/schemaOti";
+import moment from "moment";
 
 const router = new express.Router();
 
@@ -57,9 +58,14 @@ router.get("/obtenerRoscas/:idOrden", async function (req, res) {
 //obtener ordenes por fecha
 router.get("/obtenerOrdenes/:fecha", async function (req, res) {
   try {
+    const text = "fecha invalida";
     let data = req.params.fecha;
-    const resultado = await buscarOrdenes(data);
-    res.status(200).send(resultado);
+    if (moment(data, "YYYY-MM-DD", true).isValid()) {
+      const resultado = await buscarOrdenes(data);
+      res.status(200).send(resultado);
+    } else {
+      res.status(400).send(text);
+    }
   } catch (error) {
     res.status(400).send(error);
   }
