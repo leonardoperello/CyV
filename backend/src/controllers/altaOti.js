@@ -39,10 +39,8 @@ export async function cargarDatosBasicos(data) {
   oti.sector = [];
   oti.tareas = [];
   oti.estados = [];
-
   const nuevaOti = await oti.save();
-  const res = "El id de la nueva OTI es: " + nuevaOti._id;
-  return res;
+  return "El id de la nueva OTI es: " + nuevaOti._id;
 }
 
 export async function cargarSectorYTareas(data) {
@@ -100,7 +98,7 @@ export async function actualizarOrden(data) {
     const est = await cargarEstado(dataEstado);
     oti.estados.push(est);
     orden.oti.push(oti);
-    
+
     await modelOrdenProduccion.findOneAndUpdate(idOrden, orden);
     result = "actualización finalizada ";
   } else {
@@ -160,7 +158,7 @@ export async function altaOti(data) {
 export async function buscarOrdenes(data) {
   const queryOrden = { fecha: data };
   const ordenes = await modelOrdenProduccion.find(queryOrden);
-  if (ordenes) {
+  if (ordenes.length > 1) {
     const ordenesResult = [];
     for (let index = 0; index < ordenes.length; index++) {
       const orden = ordenes[index];
@@ -178,7 +176,8 @@ export async function buscarOrdenes(data) {
     }
     return ordenesResult;
   } else {
-    return "No se encuentran ordenes en esa fecha";
+    const res = "No se encuentran ordenes en esa fecha";
+    return res;
   }
 }
 
@@ -186,7 +185,7 @@ export async function buscarRoscas(data) {
   const queryOrden = { _id: data };
   const orden = await modelOrdenProduccion.findOne(queryOrden);
   const roscas = orden.rosca;
-  if (roscas) {
+  if (roscas.length > 1) {
     const roscasResult = [];
     for (let index = 0; index < roscas.length; index++) {
       const rosca = roscas[index];
@@ -202,7 +201,7 @@ export async function buscarRoscas(data) {
       };
       roscasResult.push(result);
     }
-    return JSON.stringify(roscasResult);
+    return roscasResult;
   } else {
     return "Error buscando roscas de una orden de producción";
   }

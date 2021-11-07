@@ -9,6 +9,5 @@ export async function altaRosca(data) {
   nuevaRosca.medida = data.medida;
   nuevaRosca.tipoDeRosca = tipoRosca;
   const tt = await nuevaRosca.save();
-
   return tt;
 }
