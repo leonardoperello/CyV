@@ -26,9 +26,14 @@ router.post("/", async function (req, res) {
 
 router.get("/:id", async function (req, res) {
   try {
-    const id = req.params.id;
-    const result = await tareasAsignadas(id);
-    res.json(result);
+      if(!(req.params.id.length === 24) || !req.params.id){
+       return res.status(400).send('formato id incorrecto');
+      }
+        const id = req.params.id;
+        const result = await tareasAsignadas(id);
+        res.json(result);
+
+    
   } catch (error) {
     res.status(404).send('Error, parámetros incorrectos.');
   }
