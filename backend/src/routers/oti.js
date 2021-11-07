@@ -9,6 +9,7 @@ import {
   actualizarOrden,
 } from "../controllers/altaOti";
 import { modelOti } from "../schemas/schemaOti";
+import moment from "moment";
 
 const router = new express.Router();
 
@@ -47,6 +48,9 @@ router.get("/:id", async function (req, res) {
 router.get("/obtenerRoscas/:idOrden", async function (req, res) {
   try {
     let data = req.params.idOrden;
+    if (!data || !(data.length === 24)) {
+      return res.status(400).send("Formato id incorrecto");
+    }
     const resultado = await buscarRoscas(data);
     res.status(200).send(resultado);
   } catch (error) {
@@ -57,9 +61,18 @@ router.get("/obtenerRoscas/:idOrden", async function (req, res) {
 //obtener ordenes por fecha
 router.get("/obtenerOrdenes/:fecha", async function (req, res) {
   try {
+    const text = "fecha invalida";
     let data = req.params.fecha;
-    const resultado = await buscarOrdenes(data);
-    res.status(200).send(resultado);
+    if (
+      moment(data, "YYYY-MM-DD", true).isValid() &&
+      moment(data).isAfter("2019-01-01") &&
+      moment(data).isSameOrBefore(moment().toDate())
+    ) {
+      const resultado = await buscarOrdenes(data);
+      res.status(200).send(resultado);
+    } else {
+      res.status(400).send(text);
+    }
   } catch (error) {
     res.status(400).send(error);
   }
@@ -68,9 +81,19 @@ router.get("/obtenerOrdenes/:fecha", async function (req, res) {
 //cargar datos basicos de la oti (fechas y rosca)
 router.post("/datosBasicos", async function (req, res) {
   try {
+    const text = "rosca o fecha invalida";
     let data = req.body;
-    const resultado = await cargarDatosBasicos(data);
-    res.status(200).send(resultado);
+    if (
+      data.rosca !== {} &&
+      moment(data.fechaI, "YYYY-MM-DD", true).isValid() &&
+      moment(data.fechaI).isAfter("2019-01-01") &&
+      moment(data.fechaI).isSameOrBefore(moment().toDate())
+    ) {
+      const resultado = await cargarDatosBasicos(data);
+      res.status(200).send(resultado);
+    } else {
+      res.status(400).send(text);
+    }
   } catch (error) {
     res.status(400).send(error);
   }

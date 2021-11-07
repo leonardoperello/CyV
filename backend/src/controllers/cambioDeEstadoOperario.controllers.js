@@ -48,15 +48,18 @@ export async function cambioEstadotareaAsignada(data) {
     const oti = await modelOti.findOne(queryOti);
     const tarea = await modelTarea.findOne(queryTarea);
 
-    if (oti && tarea && (data.tipoEstado.nombre === "detenida" || data.tipoEstado.nombre === "abortada")) {//quiero pasar al estado detenida
+    if (oti && tarea && (data.tipoEstado.nombre === "detenida" || data.tipoEstado.nombre === "abortada")) { //quiero pasar al estado detenida
 
-        if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "en progreso" && oti.estados[oti.estados.length - 1].tipoEstado?.nombre === "en progreso") {// contorlo que el estado anterior sea en progreso si no retorna vacio.
+        if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "en progreso" && oti.estados[oti.estados.length - 1].tipoEstado?.nombre === "en progreso") {// controlo que el estado actual sea en progreso si no retorna vacio.
             const estado = await cargarEstado(data);
+            tarea.estado[tarea.estado.length-1].fechaFin= moment().format("YYYY/MM/DD");
             tarea.estado.push(estado); //actualizo el esta de la tarea a detenida o abortada
+            oti.estados[oti.estados.length-1].fechaFin= moment().format("YYYY/MM/DD");
             oti.estados.push(estado);// actualiza el estado de la oti a detenida o abortada
 
             oti.tareas.find(tareaOti => {// busco en la oti la tarea y actualizo el estato 
                 if (tareaOti._id.equals(tarea._id)) {
+                    tareaOti.estado[tareaOti.estado.length-1].fechaFin=moment().format("YYYY/MM/DD");
                     tareaOti.estado.push(estado); // guardo el nuevo estado en tarea
                 }
             });
@@ -68,9 +71,9 @@ export async function cambioEstadotareaAsignada(data) {
 
     }
 
-    if (oti && tarea && data.tipoEstado.nombre === "finalizada") {
+    if (oti && tarea && data.tipoEstado.nombre === "finalizada") { //quiero finalizar la tarea .No controlo el estado general de oti xq si estoy en progreso el estado de la oti sigue en progreso
 
-        if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "en progreso") {// controlo que el estado anterior sea en progreso 
+        if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "en progreso") {// controlo que el estado actual sea en progreso 
             const estado = await cargarEstado(data);
 
             tarea.estado.push(estado);
