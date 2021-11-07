@@ -2,13 +2,11 @@ import { modelRosca } from "../schemas/schemaRosca";
 import { modelTipoDeRosca } from "../schemas/schemaTipoDeRosca";
 
 export async function altaRosca(data) {
-  const queryTipoRosca = { _id: data.idTipo };
-  const tipoRosca = await modelTipoDeRosca.findOne(queryTipoRosca);
+  console.log(data);
   const nuevaRosca = new modelRosca();
-  nuevaRosca.descripcionTecnica = data.descripcion;
-  nuevaRosca.medida = data.medida;
-  nuevaRosca.tipoDeRosca = tipoRosca;
-  const tt = await nuevaRosca.save();
-
-  return tt;
+  nuevaRosca.descripcionTecnica = data.rosca.descripcionTecnica;
+  nuevaRosca.medida = data.rosca.medida;
+  nuevaRosca.tipoDeRosca = data.rosca.tipoDeRosca;
+  const roscaNueva = await nuevaRosca.save();
+  return roscaNueva;
 }
