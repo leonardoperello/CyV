@@ -24,12 +24,11 @@ describe("tests caso exito de la OTI: ", () => {
       .get("/oti/obtenerRoscas/" + parameter)
       .end(function (err, res) {
         console.log(res.body);
-        expect(res).to.not.be.undefined;
         expect(res).to.have.status(200);
         done();
       });
   });
-  it("deberia crear una nueva OTI ", (done) => {
+  it.only("deberia crear una nueva OTI ", (done) => {
     let rosca = {
       id: "616e3f364ce714735d5f67a7",
       descripcionTecnica: "es una rosca dificil de hacer",
@@ -45,11 +44,10 @@ describe("tests caso exito de la OTI: ", () => {
         _id: "616e3f364ce714735d5f67a8",
       },
     };
-
     chai
       .request(url)
       .post("/oti/datosBasicos/")
-      .send({ fechaI: "2023/10/18", rosca })
+      .send({ fechaI: "2021-11-07", rosca })
       .end(function (err, res) {
         console.log(res.text);
         expect(res).to.have.status(200);
@@ -78,7 +76,10 @@ describe("tests caso exito de la OTI: ", () => {
   });
 });
 
-describe("tests caso falla de la OTI: ", () => {
+//------------------------------------------------------------------------
+// casos de fallo
+
+describe("tests casos de falla de la OTI: ", () => {
   it("deberia fallar por fecha nula ", (done) => {
     let parameter;
     chai
@@ -90,11 +91,45 @@ describe("tests caso falla de la OTI: ", () => {
         done();
       });
   });
-  it.only("deberia fallar por fecha con formato diferente ", (done) => {
+  it("deberia fallar por fecha con formato diferente ", (done) => {
     let parameter = "123";
     chai
       .request(url)
       .get("/oti/obtenerOrdenes/" + parameter)
+      .end(function (err, res) {
+        console.log(res.text);
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
+  it("deberia fallar porque no hay ordenes en esa fecha ", (done) => {
+    let parameter = "2022-11-07";
+    chai
+      .request(url)
+      .get("/oti/obtenerOrdenes/" + parameter)
+      .end(function (err, res) {
+        console.log(res.text);
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
+  it("deberia fallar porque no hay roscas en esa orden ", (done) => {
+    let parameter = "61676dd1e1c87f22ac5dc147";
+    chai
+      .request(url)
+      .get("/oti/obtenerRoscas/" + parameter)
+      .end(function (err, res) {
+        console.log(res.text);
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+  it("deberia fallar porque la rosca o la fecha estan mal", (done) => {
+    let rosca = {};
+    chai
+      .request(url)
+      .post("/oti/datosBasicos/")
+      .send({ fechaI: "2023/10/18", rosca })
       .end(function (err, res) {
         console.log(res.text);
         expect(res).to.have.status(400);

@@ -39,10 +39,8 @@ export async function cargarDatosBasicos(data) {
   oti.sector = [];
   oti.tareas = [];
   oti.estados = [];
-
   const nuevaOti = await oti.save();
-  const res = "El id de la nueva OTI es: " + nuevaOti._id;
-  return res;
+  return "El id de la nueva OTI es: " + nuevaOti._id;
 }
 
 export async function cargarSectorYTareas(data) {
@@ -187,7 +185,7 @@ export async function buscarRoscas(data) {
   const queryOrden = { _id: data };
   const orden = await modelOrdenProduccion.findOne(queryOrden);
   const roscas = orden.rosca;
-  if (roscas) {
+  if (roscas.length > 1) {
     const roscasResult = [];
     for (let index = 0; index < roscas.length; index++) {
       const rosca = roscas[index];
