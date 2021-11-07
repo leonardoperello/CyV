@@ -158,7 +158,7 @@ export async function altaOti(data) {
 export async function buscarOrdenes(data) {
   const queryOrden = { fecha: data };
   const ordenes = await modelOrdenProduccion.find(queryOrden);
-  if (ordenes.length > 1) {
+  if (ordenes.length > 0) {
     const ordenesResult = [];
     for (let index = 0; index < ordenes.length; index++) {
       const orden = ordenes[index];
@@ -185,7 +185,7 @@ export async function buscarRoscas(data) {
   const queryOrden = { _id: data };
   const orden = await modelOrdenProduccion.findOne(queryOrden);
   const roscas = orden.rosca;
-  if (roscas.length > 1) {
+  if (roscas.length > 0) {
     const roscasResult = [];
     for (let index = 0; index < roscas.length; index++) {
       const rosca = roscas[index];

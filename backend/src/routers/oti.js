@@ -48,6 +48,9 @@ router.get("/:id", async function (req, res) {
 router.get("/obtenerRoscas/:idOrden", async function (req, res) {
   try {
     let data = req.params.idOrden;
+    if (!data || !(data.length === 24)) {
+      return res.status(400).send("Formato id incorrecto");
+    }
     const resultado = await buscarRoscas(data);
     res.status(200).send(resultado);
   } catch (error) {

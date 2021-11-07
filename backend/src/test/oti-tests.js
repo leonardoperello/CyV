@@ -18,7 +18,7 @@ describe("tests caso exito de la OTI: ", () => {
       });
   });
   it("deberia traer todas las roscas de una orden de produccion ", (done) => {
-    let parameter = "613e597ecb4275f300506786";
+    let parameter = "6181b4637d1c86d79ef2a400";
     chai
       .request(url)
       .get("/oti/obtenerRoscas/" + parameter)
@@ -28,7 +28,7 @@ describe("tests caso exito de la OTI: ", () => {
         done();
       });
   });
-  it.only("deberia crear una nueva OTI ", (done) => {
+  it("deberia crear una nueva OTI ", (done) => {
     let rosca = {
       id: "616e3f364ce714735d5f67a7",
       descripcionTecnica: "es una rosca dificil de hacer",
@@ -113,8 +113,19 @@ describe("tests casos de falla de la OTI: ", () => {
         done();
       });
   });
-  it("deberia fallar porque no hay roscas en esa orden ", (done) => {
-    let parameter = "61676dd1e1c87f22ac5dc147";
+  it("deberia fallar porque el id de la rosca esta mal ", (done) => {
+    let parameter = "61676dd1e1c87f22ac5";
+    chai
+      .request(url)
+      .get("/oti/obtenerRoscas/" + parameter)
+      .end(function (err, res) {
+        console.log(res.text);
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
+  it.only("deberia fallar porque no hay roscas en esa orden ", (done) => {
+    let parameter = "61676f4ee1c87f22ac5dc148";
     chai
       .request(url)
       .get("/oti/obtenerRoscas/" + parameter)
