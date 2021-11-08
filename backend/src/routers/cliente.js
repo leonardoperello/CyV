@@ -13,6 +13,9 @@ router.get("/", async function (req, res) {
 
 router.get("/:cuit", async function (req, res) {
     try {
+        if (!typeof req.params.cuit === 'string' || req.params.cuit.length !== 11) {
+            return res.status(400).send('El formato del CUIT es incorrecto');
+        }
         const cuit = req.params.cuit;
         const result = await modelCliente.findOne({ CUIT: cuit });//buscamos al clinete por su cuit
         res.json(result);
