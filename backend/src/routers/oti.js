@@ -103,8 +103,18 @@ router.post("/datosBasicos", async function (req, res) {
 router.put("/sectoresYTareas", async function (req, res) {
   try {
     let data = req.body;
-    const resultado = await cargarSectorYTareas(data);
-    res.status(200).send(resultado);
+    if (
+      data.tareas !== {} &&
+      data.sector !== {} &&
+      data.id.length === 24 &&
+      typeof data.sector.nombre === "string" &&
+      typeof data.sector.activo === "boolean"
+    ) {
+      const resultado = await cargarSectorYTareas(data);
+      res.status(200).send(resultado);
+    } else {
+      return res.status(400).send("Error en el ingreso de los datos");
+    }
   } catch (error) {
     res.status(400).send(error);
   }
@@ -113,8 +123,17 @@ router.put("/sectoresYTareas", async function (req, res) {
 router.put("/actualizarOrden", async function (req, res) {
   try {
     let data = req.body;
-    const resultado = await actualizarOrden(data);
-    res.status(200).send(resultado);
+    if (
+      data.idOTI.length === 24 &&
+      data.idOrden.length === 24 &&
+      moment(data.fechaI, "YYYY-MM-DD", true).isValid() &&
+      moment(data.fechaI).isSameOrBefore(moment().toDate())
+    ) {
+      const resultado = await actualizarOrden(data);
+      res.status(200).send(resultado);
+    } else {
+      return res.status(400).send("Error en el ingreso de datos");
+    }
   } catch (error) {
     res.status(400).send(error);
   }

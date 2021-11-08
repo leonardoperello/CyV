@@ -54,22 +54,48 @@ describe("tests caso exito de la OTI: ", () => {
         done();
       });
   });
-  it("debería traer todos los sectores", (done) => {
+  it("debería cargar un sector y sus tareas", (done) => {
+    let sector = {
+      _id: "613bc8d2b2153ee73d455fe7",
+      nombre: "corte",
+      activo: true,
+    };
+    // la fecha la dejo nula porque eso se debe modificar posteriormente
+    let tareas = {
+      descripcion: "tarea 1",
+      nombre: "tarea nueva1",
+      fechaI: "",
+      fechaF: "",
+      tipoDeTarea: {
+        nombre: "tarea5",
+        descripcion: "descripcion_5",
+      },
+      sector: { nombre: "corte" },
+      idOperario: "",
+      nombreEstado: "iniciada",
+      descripcionEstado: "se inicializo correctamente",
+    };
     chai
       .request(url)
-      .get("/oti/sectores")
+      .put("/oti/sectoresYTareas/")
+      .send({ id: "618843c2ae9cefbf19050627", sector, tareas })
       .end(function (err, res) {
-        console.log(res.body);
+        console.log(res.text);
         expect(res).to.have.status(200);
         done();
       });
   });
-  it("debería cargar un sector y algunas tareas", (done) => {
+  it("debería actualizar la orden de producción con la oti", (done) => {
     chai
       .request(url)
-      .get("/oti/sectoresYTareas")
+      .put("/oti/sectoresYTareas/")
+      .send({
+        idOti: "618843c2ae9cefbf19050627",
+        idOrden: "613e597ecb4275f300506786",
+        fechaI: "2021-11-07",
+      })
       .end(function (err, res) {
-        console.log(res.body);
+        console.log(res.text);
         expect(res).to.have.status(200);
         done();
       });
@@ -124,7 +150,7 @@ describe("tests casos de falla de la OTI: ", () => {
         done();
       });
   });
-  it.only("deberia fallar porque no hay roscas en esa orden ", (done) => {
+  it("deberia fallar porque no hay roscas en esa orden ", (done) => {
     let parameter = "61676f4ee1c87f22ac5dc148";
     chai
       .request(url)
@@ -144,6 +170,52 @@ describe("tests casos de falla de la OTI: ", () => {
       .end(function (err, res) {
         console.log(res.text);
         expect(res).to.have.status(400);
+        done();
+      });
+  });
+  it("debería fallar al cargar un sector y sus tareas", (done) => {
+    let sector = {
+      _id: "613bc8d2b2153ee73d455fe7",
+      nombre: "corte",
+      activo: "asd",
+    };
+    // la fecha la dejo nula porque eso se debe modificar posteriormente
+    let tareas = {
+      descripcion: "tarea 1",
+      nombre: "tarea nueva1",
+      fechaI: "",
+      fechaF: "",
+      tipoDeTarea: {
+        nombre: "tarea5",
+        descripcion: "descripcion_5",
+      },
+      sector: { nombre: "corte" },
+      idOperario: "",
+      nombreEstado: "iniciada",
+      descripcionEstado: "se inicializo correctamente",
+    };
+    chai
+      .request(url)
+      .put("/oti/sectoresYTareas/")
+      .send({ id: "618843c2ae9cefbf19050627", sector, tareas })
+      .end(function (err, res) {
+        console.log(res.text);
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
+  it("debería fallar al actualizar la orden de producción con la oti", (done) => {
+    chai
+      .request(url)
+      .put("/oti/sectoresYTareas/")
+      .send({
+        idOti: "618843c2ae9cefbf19050627",
+        idOrden: "613e597ecb4275f300506786",
+        fechaI: "2021-11-07",
+      })
+      .end(function (err, res) {
+        console.log(res.text);
+        expect(res).to.have.status(200);
         done();
       });
   });
