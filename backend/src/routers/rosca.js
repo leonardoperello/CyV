@@ -1,11 +1,22 @@
 import express from "express";
 import { modelRosca } from "../schemas/schemaRosca";
+import { modelTipoDeRosca } from "../schemas/schemaTipoDeRosca";
 import { altaRosca } from "../controllers/altaRosca";
 const router = express.Router();
 
 router.get("/", async function (req, res) {
   try {
     const resultado = await modelRosca.find({});
+    res.status(200).send(resultado.reverse());
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+router.get("/tipoDeRosca", async function (req, res) {
+  try {
+    const resultado = await modelTipoDeRosca.find({});
+    console.log(resultado);
     res.status(200).send(resultado.reverse());
   } catch (error) {
     res.status(400).send(error);
