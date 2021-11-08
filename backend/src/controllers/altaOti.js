@@ -46,32 +46,31 @@ export async function cargarDatosBasicos(data) {
 export async function cargarSectorYTareas(data) {
   const idOti = { _id: data.id };
   const oti = await modelOti.findOne(idOti);
-  const resultado = "";
   // la idea es que si el sector ya esta dentro de la oti no te deje agregarlo de nuevo
-  if (oti.sector.nombre !== data.sector.nombre) {
-    oti.sector.push(data.sector);
-    // el numero de orden va estar determinado por la posición de la tarea en el arreglo pasado en data
-    const numeroOrden = oti.tareas.length;
-    for (let index = 0; index < data.tareas.length; index++) {
-      //hacer control de que sea el mismo sector que el sector y que el orden este bien
-      if (data.tareas[index].sector.nombre === data.sector.nombre) {
-        const element = await altaTarea(
-          data.tareas[index],
-          numeroOrden + index + 1
-        );
-        oti.tareas.push(element);
-      } else {
-        resultado =
-          "El sector no corresponde con la tarea que se quiere agregar";
-      }
+  for (let sectores = 0; sectores < oti.sector.length; sectores++) {
+    if (oti.sector[sectores].nombre === data.sector.nombre) {
+      return (
+        "Error!!! El sector " + data.sector.nombre + " ya esta dentro de la OTI"
+      );
     }
-  } else {
-    resultado = "El sector " + data.sector.nombre + " ya esta dentro de la OTI";
   }
-
-  await modelOti.findOneAndUpdate(idOti, oti);
-
-  return "actualización correcta" + resultado;
+  oti.sector.push(data.sector);
+  // el numero de orden va estar determinado por la posición de la tarea en el arreglo pasado en data
+  const numeroOrden = oti.tareas.length;
+  for (let index = 0; index < data.tareas.length; index++) {
+    //hacer control de que sea el mismo sector que el sector y que el orden este bien
+    if (data.tareas[index].sector.nombre === data.sector.nombre) {
+      const element = await altaTarea(
+        data.tareas[index],
+        numeroOrden + index + 1
+      );
+      oti.tareas.push(element);
+    } else {
+      return "El sector no corresponde con la tarea que se quiere agregar";
+    }
+    await modelOti.findOneAndUpdate(idOti, oti);
+    return "Actualización correcta, tareas agregadas";
+  }
 }
 
 export async function actualizarOrden(data) {
@@ -79,32 +78,31 @@ export async function actualizarOrden(data) {
   const oti = await modelOti.findOne(idOti);
   const idOrden = { _id: data.idOrden };
   const orden = await modelOrdenProduccion.findOne(idOrden);
-  const longS = oti.sector.length;
+
   const longT = oti.tareas.length;
-  const result = "";
   // solo vamos a poder actualizar la orden con la oti
   // cuando se haya cargado el último sector y sus tareas
   // que es el deposito
-  if (oti.sector[longS - 1].nombre === "deposito" && longT > 1) {
-    const dataEstado = {
-      fechaInicio: moment().format(data.fechaI),
-      fechaFin: data.fechaF ? moment(data.fechaF) : null,
-      observacion: "creado correctamente",
-      tipoEstado: {
-        nombre: "iniciada",
-        descripcion: "se ha inicializado correctamente",
-      },
-    };
-    const est = await cargarEstado(dataEstado);
-    oti.estados.push(est);
-    orden.oti.push(oti);
-
-    await modelOrdenProduccion.findOneAndUpdate(idOrden, orden);
-    result = "actualización finalizada ";
-  } else {
-    result = "La OTI todavía no cargo todas las tareas de todos los sectores";
+  //if (oti.sector[longS - 1].nombre === "deposito" && longT > 1) {
+  for (let sectores = 0; sectores < oti.sector.length; sectores++) {
+    if (oti.sector[sectores].nombre === "deposito" && longT > 1) {
+      const dataEstado = {
+        fechaInicio: moment().format(data.fechaI),
+        fechaFin: data.fechaF ? moment(data.fechaF) : null,
+        observacion: "creado correctamente",
+        tipoEstado: {
+          nombre: "iniciada",
+          descripcion: "se ha inicializado correctamente",
+        },
+      };
+      const est = await cargarEstado(dataEstado);
+      oti.estados.push(est);
+      orden.oti.push(oti);
+      await modelOrdenProduccion.findOneAndUpdate(idOrden, orden);
+      return "Actualización finalizada";
+    }
   }
-  return result;
+  return "La OTI todavía no cargo todas las tareas de todos los sectores";
 }
 
 export async function altaOti(data) {

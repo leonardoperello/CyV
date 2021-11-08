@@ -124,7 +124,7 @@ router.put("/actualizarOrden", async function (req, res) {
   try {
     let data = req.body;
     if (
-      data.idOTI.length === 24 &&
+      data.idOti.length === 24 &&
       data.idOrden.length === 24 &&
       moment(data.fechaI, "YYYY-MM-DD", true).isValid() &&
       moment(data.fechaI).isSameOrBefore(moment().toDate())

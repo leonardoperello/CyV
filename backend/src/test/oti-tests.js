@@ -88,10 +88,10 @@ describe("tests caso exito de la OTI: ", () => {
   it("debería actualizar la orden de producción con la oti", (done) => {
     chai
       .request(url)
-      .put("/oti/sectoresYTareas/")
+      .put("/oti/actualizarOrden/")
       .send({
-        idOti: "618843c2ae9cefbf19050627",
-        idOrden: "613e597ecb4275f300506786",
+        idOti: "61892a2dfd36fcec4c9bd251",
+        idOrden: "61889bc26e14e867574dd7bd",
         fechaI: "2021-11-07",
       })
       .end(function (err, res) {
@@ -207,15 +207,15 @@ describe("tests casos de falla de la OTI: ", () => {
   it("debería fallar al actualizar la orden de producción con la oti", (done) => {
     chai
       .request(url)
-      .put("/oti/sectoresYTareas/")
+      .put("/oti/actualizarOrden/")
       .send({
         idOti: "618843c2ae9cefbf19050627",
         idOrden: "613e597ecb4275f300506786",
-        fechaI: "2021-11-07",
+        fechaI: "2021/11/07",
       })
       .end(function (err, res) {
         console.log(res.text);
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(400);
         done();
       });
   });
