@@ -1,4 +1,4 @@
-let chai = require("chai");
+/* let chai = require("chai");
 let chaiHttp = require("chai-http");
 const expect = require("chai").expect;
 chai.use(chaiHttp);
@@ -220,3 +220,4 @@ describe("tests casos de falla de la OTI: ", () => {
       });
   });
 });
+*/

@@ -84,7 +84,8 @@ router.post("/datosBasicos", async function (req, res) {
     const text = "rosca o fecha invalida";
     let data = req.body;
     if (
-      data.rosca !== {} &&
+      Object.keys(data.rosca).length !== 0 &&
+      data.rosca !== undefined &&
       moment(data.fechaI, "YYYY-MM-DD", true).isValid() &&
       moment(data.fechaI).isAfter("2019-01-01") &&
       moment(data.fechaI).isSameOrBefore(moment().toDate())
@@ -104,8 +105,8 @@ router.put("/sectoresYTareas", async function (req, res) {
   try {
     let data = req.body;
     if (
-      data.tareas !== {} &&
-      data.sector !== {} &&
+      data.tareas.length !== 0 &&
+      Object.keys(data.sector).length !== 0 &&
       data.id.length === 24 &&
       typeof data.sector.nombre === "string" &&
       typeof data.sector.activo === "boolean"

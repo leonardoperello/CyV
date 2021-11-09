@@ -40,7 +40,8 @@ export async function cargarDatosBasicos(data) {
   oti.tareas = [];
   oti.estados = [];
   const nuevaOti = await oti.save();
-  return "El id de la nueva OTI es: " + nuevaOti._id;
+  //return "El id de la nueva OTI es: " + nuevaOti._id;
+  return nuevaOti;
 }
 
 export async function cargarSectorYTareas(data) {
@@ -68,8 +69,9 @@ export async function cargarSectorYTareas(data) {
     } else {
       return "El sector no corresponde con la tarea que se quiere agregar";
     }
-    await modelOti.findOneAndUpdate(idOti, oti);
-    return "Actualización correcta, tareas agregadas";
+    const nuevaOti = await modelOti.findOneAndUpdate(idOti, oti);
+    //return "Actualización correcta, tareas agregadas";
+    return nuevaOti;
   }
 }
 
