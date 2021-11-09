@@ -26,15 +26,15 @@ router.post("/", async function (req, res) {
 
 router.get("/:id", async function (req, res) {
   try {
-      if(!(req.params.id.length === 24) || !req.params.id){
-       return res.status(400).send('formato id incorrecto');
-      }      
-        const id = req.params.id;
-        const result = await tareasAsignadas(id);
-        if(!result){
-          return res.status(200).send('usted no tiene tareas asignadas');
-         }
-        res.json(result);
+    if (!(req.params.id.length === 24) || !req.params.id) {
+      return res.status(400).send('formato id incorrecto');
+    }
+    const id = req.params.id;
+    const result = await tareasAsignadas(id);
+    if (!result) {
+      return res.status(200).send('usted no tiene tareas asignadas');
+    }
+    res.json(result);
   } catch (error) {
     res.status(404).send('Error, parámetros incorrectos.');
   }
@@ -43,10 +43,10 @@ router.get("/:id", async function (req, res) {
 router.put("/", async function (req, res) {
   try {
     let data = req.body;
-    if(!data){
+    if (!data) {
       return res.status(400).send('parametros vacio');
-     }
-    
+    }
+
     const resultado = await cambioEstadotareaAsignada(data);
     switch (resultado) {
       case 'error id':
@@ -56,7 +56,7 @@ router.put("/", async function (req, res) {
       case 'error sector':
         return res.status(400).send('error , el sector ingresado no existe');
     }
- 
+
     res.json(resultado);
   } catch (error) {
     res.status(404).send('Error, parámetros incorrectos.');
