@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 
 describe("test de estados: ", () => {
   //CASO FELIZ
-  it('cambio de estado operario', async () => {
+  it.only('cambio de estado operario', async () => {
     const resTarea = await fetch('http://localhost:8081/estado/613e6361b2153ee73d786bc9');
     const tareas = await resTarea.json();
     console.log(tareas);
@@ -52,7 +52,7 @@ describe("test de estados: ", () => {
     expect(resTarea.status).to.be.equal(400);
   });
 
-  it.only("caso defectuoso pruebo como funciona el control de longitud de id", async () => {
+  it("caso defectuoso pruebo como funciona el control de longitud de id", async () => {
 
     const data = {
 
