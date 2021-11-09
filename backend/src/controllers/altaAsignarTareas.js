@@ -50,28 +50,28 @@ export async function asignarTareaOperario(data) {
         nombre: 'iniciada',
         descripcion: ''
     };
-
-    tareas.forEach(async tarea => {
-        tarea.idOperario = idOperario; //si la tarea tenia un un operario asignado xq estaba en detenida lo piso
-        if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "detenida") {
-            estado = await cargarEstado(data);//si esta en iniciada queda asi , el operario la cambia a en progreso
-            tarea.estado.push(estado);
-        }
-        await oti.tareas.find(tareaOti => {// busco en la oti la tarea y la actualizo
-            if (tareaOti._id.equals(tarea._id)) {
-                tareaOti.idOperario = tarea.idOperario; // guardo el nuevo estado en tarea
-                if (estado !== '') {
-                    tareaOti.estado.push(estado);
-                }
+    if (true) {
+        tareas.forEach(async tarea => {
+            tarea.idOperario = idOperario; //si la tarea tenia un un operario asignado xq estaba en detenida lo piso
+            if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "detenida") {
+                estado = await cargarEstado(data);//si esta en iniciada queda asi , el operario la cambia a en progreso
+                tarea.estado.push(estado);
             }
+            await oti.tareas.find(tareaOti => {// busco en la oti la tarea y la actualizo
+                if (tareaOti._id.equals(tarea._id)) {
+                    tareaOti.idOperario = tarea.idOperario; // guardo el nuevo estado en tarea
+                    if (estado !== '') {
+                        tareaOti.estado.push(estado);
+                    }
+                }
+            });
+            await modelTarea.findOneAndUpdate({ _id: tarea._id }, tarea);
         });
-        await modelTarea.findOneAndUpdate({ _id: tarea._id }, tarea);
-    });
 
-    //buscao oti y actualizo
+        //buscao oti y actualizo
 
-    return await modelOti.findOneAndUpdate(queryOti, oti);
-
+        return await modelOti.findOneAndUpdate(queryOti, oti);
+    }
 
 }
 

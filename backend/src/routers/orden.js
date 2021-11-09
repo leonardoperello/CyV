@@ -25,8 +25,19 @@ router.get("/:id", async function (req, res) {
 router.post("/crearOrdenProduccion", async function (req, res) {
   let data = req.body;
   try {
-    const resultInsert = await altaOrdenProduccion(data);
-    res.json(resultInsert);
+    // if (!typeof req.body.cuitCliente === 'string' || req.body.cuitCliente.length !== 11) {
+    //   return res.status(400).send('El formato del CUIT es incorrecto');
+    // } 
+    // if(!typeof req.body.detalle === 'string'){
+    //   return res.status(400).send('El formato del detalle es incorrecto');
+    // }
+    if (moment(req.body.fecha, "YYYY-MM-DD", true).isValid() && moment(data).isAfter(moment().toDate()) && moment(data).isBefore(moment().toDate())) {
+      console.log('fecha valida');
+    } else {
+      console.log('FECHA INVALIDA');
+    }
+    // const resultInsert = await altaOrdenProduccion(data);
+    // res.json(resultInsert);
   } catch (error) {
     console.log(error);
   }

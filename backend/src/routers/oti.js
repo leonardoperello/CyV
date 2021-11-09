@@ -48,6 +48,9 @@ router.get("/:id", async function (req, res) {
 router.get("/obtenerRoscas/:idOrden", async function (req, res) {
   try {
     let data = req.params.idOrden;
+    if (!data || !(data.length === 24)) {
+      return res.status(400).send("Formato id incorrecto");
+    }
     const resultado = await buscarRoscas(data);
     res.status(200).send(resultado);
   } catch (error) {
@@ -81,7 +84,8 @@ router.post("/datosBasicos", async function (req, res) {
     const text = "rosca o fecha invalida";
     let data = req.body;
     if (
-      data.rosca !== {} &&
+      Object.keys(data.rosca).length !== 0 &&
+      data.rosca !== undefined &&
       moment(data.fechaI, "YYYY-MM-DD", true).isValid() &&
       moment(data.fechaI).isAfter("2019-01-01") &&
       moment(data.fechaI).isSameOrBefore(moment().toDate())
@@ -100,8 +104,18 @@ router.post("/datosBasicos", async function (req, res) {
 router.put("/sectoresYTareas", async function (req, res) {
   try {
     let data = req.body;
-    const resultado = await cargarSectorYTareas(data);
-    res.status(200).send(resultado);
+    if (
+      data.tareas.length !== 0 &&
+      Object.keys(data.sector).length !== 0 &&
+      data.id.length === 24 &&
+      typeof data.sector.nombre === "string" &&
+      typeof data.sector.activo === "boolean"
+    ) {
+      const resultado = await cargarSectorYTareas(data);
+      res.status(200).send(resultado);
+    } else {
+      return res.status(400).send("Error en el ingreso de los datos");
+    }
   } catch (error) {
     res.status(400).send(error);
   }
@@ -110,8 +124,17 @@ router.put("/sectoresYTareas", async function (req, res) {
 router.put("/actualizarOrden", async function (req, res) {
   try {
     let data = req.body;
-    const resultado = await actualizarOrden(data);
-    res.status(200).send(resultado);
+    if (
+      data.idOti.length === 24 &&
+      data.idOrden.length === 24 &&
+      moment(data.fechaI, "YYYY-MM-DD", true).isValid() &&
+      moment(data.fechaI).isSameOrBefore(moment().toDate())
+    ) {
+      const resultado = await actualizarOrden(data);
+      res.status(200).send(resultado);
+    } else {
+      return res.status(400).send("Error en el ingreso de datos");
+    }
   } catch (error) {
     res.status(400).send(error);
   }
