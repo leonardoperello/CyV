@@ -19,17 +19,6 @@ describe("test de estados: ", () => {
     },
   };
 
-  const data = {
-    idOti: '616f2980c5e1d1846975c8cd',
-    idTarea: "616f2980c5e1d1846975c8e7",
-    nombreSector: "torneria",//controlar nombre del sector de tarea sea el sector de operario
-    observacion: "hola profes",
-    tipoEstado: {
-      nombre: "finalizada",
-      descripcion: ""
-    }
-  }
-
   it("debería traer todas las tareas de los operario", (done) => {
     chai
       .request(url)

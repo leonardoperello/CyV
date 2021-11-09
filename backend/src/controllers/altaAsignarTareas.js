@@ -6,11 +6,11 @@ import { cargarEstado } from "../controllers/altaEstado.controllers";
 export async function obtenerOtisDelSector(idSector) {
     const querySector = { nombre: idSector }
     const sector = await modelSector.findOne(querySector);
-    const otis = await modelOti.find({});
-
+    const otis = await modelOti.find({}); // si los estados estan vacios este metodo pincha
+    console.log(otis);
     const otisFiltradas = otis.filter(oti =>
         oti.sector.find(sec =>
-            sec.nombre === sector.nombre && sec.activo && (oti.estados[oti.estados.length - 1].tipoEstado?.nombre === "en progreso" || oti.estados[oti.estados.length - 1].tipoEstado?.nombre === "detenida")));//me quedo con las otis que se encuentran en el sector listas para trabajar.
+            sec.nombre === sector.nombre && sec.activo && (oti.estados[oti.estados?.length - 1].tipoEstado?.nombre === "en progreso" || oti.estados[oti.estados?.length - 1].tipoEstado?.nombre === "detenida")));//me quedo con las otis que se encuentran en el sector listas para trabajar.
     if (otisFiltradas.length) {
 
         return otisFiltradas.map(oti => {
