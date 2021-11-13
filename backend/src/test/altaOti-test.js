@@ -207,7 +207,7 @@ describe("Deberia fallar en la creación de la OTI: ", () => {
 });
 
 describe("Deberia fallar en la creaciónd de tareas: ", () => {
-  it.only("Deberia fallar en la creación de tareas", (done) => {
+  it("Deberia fallar en la creación de tareas", (done) => {
     console.log("primera ruta: buscar ordenes");
     let parameter = "2021-10-13";
     chai
