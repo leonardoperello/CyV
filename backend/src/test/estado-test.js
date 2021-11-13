@@ -1,64 +1,83 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
 const expect = require("chai").expect;
+const fetch = require("node-fetch-npm");
 chai.use(chaiHttp);
 
-const url = "http://localhost:8081";
-// tres casos de test valor limite en id
-//operario de otro sector
-//reglas de cambio de estado .
 describe("test de estados: ", () => {
-  const data = {
-    idOti: "616f2980c5e1d1846975c8cd",
-    idTarea: "616f2980c5e1d1846975c8e7",
-    nombreSector: "torneria", //controlar nombre del sector de tarea sea el sector de operario
-    observacion: "hola profes",
-    tipoEstado: {
-      nombre: "finalizada",
-      descripcion: "",
-    },
-  };
+  //CASO FELIZ
+  it.only('cambio de estado operario', async () => {
+    const resTarea = await fetch('http://localhost:8081/estado/613e6361b2153ee73d786bc9');
+    const tareas = await resTarea.json();
+    console.log(tareas);
+    expect('Content-Type', /json/);
+    expect(resTarea.status).to.be.equal(200);
 
-  it("debería traer todas las tareas de los operario", (done) => {
-    chai
-      .request(url)
-      .get("/estado/613e626ab2153ee73d77fb1d")
-      .end(function (err, res) {
-        expect("Content-Type", /json/);
-        expect(res).to.have.status(200);
-        done();
-      });
+
+    const res = await fetch('http://localhost:8081/estado/tipoEstado');
+    const tiposEstado = await res.json();
+    console.log(tiposEstado);
+    expect('Content-Type', /json/);
+    expect(res.status).to.be.equal(200);
+
+    const data = {
+      idOti: tareas.idOti,
+      idTarea: tareas.tareasOperario[0]._id,
+      nombreSector: tareas.tareasOperario[0].sector.nombre,
+      observacion: "caso de test",
+      tipoEstado: tiposEstado[4]
+    }
+
+    const resCrearestado = await fetch('http://localhost:8081/estado', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+
+    });
+    const estadoNUevo = await resCrearestado.json();
+    console.log(estadoNUevo);
+    expect('Content-Type', /json/);
+    expect(resCrearestado.status).to.be.equal(200);
+
+
   });
 
-  it("caso defectuoso pruebo como funciona el control de longitud de id", (done) => {
-    chai
-      .request(url)
-      .get("/estado/613e626ab2153ee73d77fb1d44444")
-      .end(function (err, res) {
-        expect(res).to.have.status(400);
-        done();
-      });
+  //CASOS DE ERROR
+  it("caso defectuoso pruebo como funciona el control de longitud de id", async () => {
+    const resTarea = await fetch('http://localhost:8081/estado/613e6361b21rrrrrr53ee73d786bc9');
+    const tareas = await resTarea.text();
+    console.log(tareas);
+    expect(resTarea.status).to.be.equal(400);
   });
 
-  it("coleccion de tipos de Estados", (done) => {
-    chai
-      .request(url)
-      .get("/estado/tipoEstado")
-      .end(function (err, res) {
-        expect("Content-Type", /json/);
-        expect(res).to.have.status(200);
-        done();
-      });
+  it("caso defectuoso pruebo como funciona el control de longitud de id", async () => {
+
+    const data = {
+
+      idOti: "616f2980c5e1d1846975c8cd",
+      idTarea: "616f2981c5e1d1846975c8f5",
+      nombreSector: "deposito",
+      observacion: "hola profes",
+      tipoEstado: {
+        nombre: "en progreso",
+        descripcion: ""
+      }
+    }
+
+    const resCrearestado = await fetch('http://localhost:8081/estado', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+
+    });
+    const estadoNUevo = await resCrearestado.text();
+    console.log(estadoNUevo);
+    expect(resCrearestado.status).to.be.equal(400);
+
   });
 
-  it("coleccion de tipos de Estados", (done) => {
-    chai
-      .request(url)
-      .put("/estado")
-      .send(data)
-      .end(function (err, res) {
-        expect(res).to.have.status(200);
-        done();
-      });
-  });
 });

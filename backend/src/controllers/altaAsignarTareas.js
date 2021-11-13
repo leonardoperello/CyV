@@ -6,11 +6,11 @@ import { cargarEstado } from "../controllers/altaEstado.controllers";
 export async function obtenerOtisDelSector(idSector) {
     const querySector = { nombre: idSector }
     const sector = await modelSector.findOne(querySector);
-    const otis = await modelOti.find({});
-
+    const otis = await modelOti.find({}); // si los estados estan vacios este metodo pincha
+    console.log(otis);
     const otisFiltradas = otis.filter(oti =>
         oti.sector.find(sec =>
-            sec.nombre === sector.nombre && sec.activo && (oti.estados[oti.estados.length - 1].tipoEstado?.nombre === "en progreso" || oti.estados[oti.estados.length - 1].tipoEstado?.nombre === "detenida")));//me quedo con las otis que se encuentran en el sector listas para trabajar.
+            sec.nombre === sector.nombre && sec.activo && (oti.estados[oti.estados?.length - 1].tipoEstado?.nombre === "en progreso" || oti.estados[oti.estados?.length - 1].tipoEstado?.nombre === "detenida")));//me quedo con las otis que se encuentran en el sector listas para trabajar.
     if (otisFiltradas.length) {
 
         return otisFiltradas.map(oti => {
@@ -50,28 +50,26 @@ export async function asignarTareaOperario(data) {
         nombre: 'iniciada',
         descripcion: ''
     };
-    if (true) {
-        tareas.forEach(async tarea => {
-            tarea.idOperario = idOperario; //si la tarea tenia un un operario asignado xq estaba en detenida lo piso
-            if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "detenida") {
-                estado = await cargarEstado(data);//si esta en iniciada queda asi , el operario la cambia a en progreso
-                tarea.estado.push(estado);
-            }
-            await oti.tareas.find(tareaOti => {// busco en la oti la tarea y la actualizo
-                if (tareaOti._id.equals(tarea._id)) {
-                    tareaOti.idOperario = tarea.idOperario; // guardo el nuevo estado en tarea
-                    if (estado !== '') {
-                        tareaOti.estado.push(estado);
-                    }
+    tareas.forEach(async tarea => {
+        tarea.idOperario = idOperario; //si la tarea tenia un un operario asignado xq estaba en detenida lo piso
+        if (tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "detenida") {
+            estado = await cargarEstado(data);//si esta en iniciada queda asi , el operario la cambia a en progreso
+            tarea.estado.push(estado);
+        }
+        await oti.tareas.find(tareaOti => {// busco en la oti la tarea y la actualizo
+            if (tareaOti._id.equals(tarea._id)) {
+                tareaOti.idOperario = tarea.idOperario; // guardo el nuevo estado en tarea
+                if (estado !== '') {
+                    tareaOti.estado.push(estado);
                 }
-            });
-            await modelTarea.findOneAndUpdate({ _id: tarea._id }, tarea);
+            }
         });
+        await modelTarea.findOneAndUpdate({ _id: tarea._id }, tarea);
+    });
 
-        //buscao oti y actualizo
+    //buscao oti y actualizo
 
-        return await modelOti.findOneAndUpdate(queryOti, oti);
-    }
+    return await modelOti.findOneAndUpdate(queryOti, oti);
 
 }
 
