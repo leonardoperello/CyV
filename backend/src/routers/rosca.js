@@ -35,14 +35,16 @@ router.get("/:id", async function (req, res) {
 router.post("/", async function (req, res) {
   let data = req.body;
   try {
-    if (typeof req.body.rosca.descripcionTecnica !== 'string') {
-      return res.status(400).send('El formato de la descripcion tecnica es incorrecto');
+    if (typeof data.descripcionTecnica !== "string") {
+      return res
+        .status(400)
+        .send("El formato de la descripcion tecnica es incorrecto");
     }
-    if (typeof req.body.rosca.medida !== 'string') {
-      return res.status(400).send('El formato de la medida es incorrecto');
+    if (typeof data.medida !== "string") {
+      return res.status(400).send("El formato de la medida es incorrecto");
     }
-    if (Object.keys(req.body.rosca.tipoDeRosca).length === 0) {
-      return res.status(400).send('La rosca no tiene un tipo de rosca');
+    if (Object.keys(data.tipoDeRosca).length === 0) {
+      return res.status(400).send("La rosca no tiene un tipo de rosca");
     }
     const resultado = await altaRosca(data);
     res.status(200).send(resultado);

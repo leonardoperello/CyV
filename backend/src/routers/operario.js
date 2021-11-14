@@ -22,10 +22,10 @@ router.get("/:id", async function (req, res) {
 });
 
 router.get("operarioSector/:nombre", async function (req, res) {
-  console.log('LLEGO ACA');
+  console.log("LLEGO ACA");
   try {
-    if (typeof req.params.nombre !== 'string') {
-      return res.status(400).send('El formato del nombre es incorrecto');
+    if (typeof req.params.nombre !== "string") {
+      return res.status(400).send("El formato del nombre es incorrecto");
     }
     const nombre = req.params.nombre;
     const result = await modelOperario.findOne({ nombre: nombre });
