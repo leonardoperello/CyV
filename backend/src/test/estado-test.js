@@ -7,7 +7,7 @@ chai.use(chaiHttp);
 const url = "http://localhost:8081";
 describe("test de estados: ", () => {
   //CASO FELIZ
-  it.only('cambio de estado operario', async () => {
+  it('cambio de estado operario', async () => {
     const resTarea = await fetch('http://localhost:8081/estado/613e6361b2153ee73d786bc9');
     const tareas = await resTarea.json();
     console.log(tareas);

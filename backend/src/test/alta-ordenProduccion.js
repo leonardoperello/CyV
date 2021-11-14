@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 const url = "http://localhost:8081";
 
 describe("Testeando los casos correctos: ", () => {
-    it("Enviando un cuit de un cliente que existe", (done) => {
+    it.only("Enviando un cuit de un cliente que existe", (done) => {
         chai
             .request(url)
             .get("/cliente/20332288354")
@@ -17,7 +17,7 @@ describe("Testeando los casos correctos: ", () => {
             });
     });
 
-    it("Creando una nueva rosca ", (done) => {
+    it.only("Creando una nueva rosca ", (done) => {
         let rosca = {
             id: "616e3f364ce714735d5f67a7",
             descripcionTecnica: "es una rosca dificil de hacer",
@@ -78,8 +78,8 @@ describe("Testeando los casos correctos: ", () => {
             .post("/orden/crearOrdenProduccion")
             .send(ordenProduccion)
             .end(function (err, res) {
-                console.log(res.error.text);
-                expect(res).to.have.status(400);
+                // console.log(res.error.text);
+                expect(res).to.have.status(200);
                 done();
             });
     });

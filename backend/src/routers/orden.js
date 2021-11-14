@@ -33,6 +33,8 @@ router.post("/crearOrdenProduccion", async function (req, res) {
       return res.status(400).send('El formato del detalle es incorrecto');
     }
     if (!moment(req.body.fecha, "YYYY-MM-DD", true).isValid() || (req.body.fecha !== moment(new Date()).format("YYYY-MM-DD"))) {
+      console.log(req.body.fecha);
+      console.log(moment(new Date()).format("YYYY-MM-DD"));
       return res.status(400).send('El formato de la fecha es incorrecto o la fecha no corresponde al dia de hoy');
     }
     if (Object.keys(req.body.supervisor).length === 0) {
