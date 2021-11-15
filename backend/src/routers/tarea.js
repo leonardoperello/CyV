@@ -11,11 +11,12 @@ const router = new express.Router();
 
 router.get("/obtenerOtis", async function (req, res) {
   try {
-    if (req.query.id !== "deposito") {
-      return res.status(400).send("El sector no existe");
+    if (typeof req.body.nombre !== String) {
+      return res.status(400).send("Sector incorrecto");
     }
-    const idSector = req.query.id;
-    const result = await obtenerOtisDelSector(idSector);
+    console.log(req.body.nombre);
+    const nombreSector = req.body.nombre;
+    const result = await obtenerOtisDelSector(nombreSector);
     res.json(result);
   } catch (error) {
     console.log(error);

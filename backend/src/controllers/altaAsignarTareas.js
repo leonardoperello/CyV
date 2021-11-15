@@ -3,8 +3,8 @@ import { modelSector } from "../schemas/schemaSector";
 import { modelTarea } from "../schemas/schemaTarea";
 import { cargarEstado } from "../controllers/altaEstado.controllers";
 
-export async function obtenerOtisDelSector(idSector) {
-  const querySector = { nombre: idSector };
+export async function obtenerOtisDelSector(nombreSector) {
+  const querySector = { nombre: nombreSector };
   const sector = await modelSector.findOne(querySector);
   const otis = await modelOti.find({}); // si los estados estan vacios este metodo pincha
   console.log(otis);
