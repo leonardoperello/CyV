@@ -1,10 +1,10 @@
-import { Schema, model } from 'mongoose';
-import { schemaOperario } from './schemaOperario';
+import { Schema, model } from "mongoose";
+import { schemaOperario } from "./schemaOperario";
 
 export const schemaSector = new Schema({
-    nombre: String,
-    activo: Boolean,
-    operario: [schemaOperario],
+  nombre: String,
+  activo: Boolean,
+  operario: [schemaOperario],
 });
 
-export const modelSector = model('sector', schemaSector, 'sector');
+export const modelSector = model("sector", schemaSector, "sector");
