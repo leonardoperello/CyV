@@ -9,15 +9,14 @@ import {
 import { modelTarea } from "../schemas/schemaTarea";
 const router = new express.Router();
 
-router.get("/obtenerOtis", async function (req, res) {
+router.get("/obtenerOtis/:nombre", async function (req, res) {
   try {
-    if (typeof req.body.nombre !== String) {
+    if (typeof req.params.nombre !== "string") {
       return res.status(400).send("Sector incorrecto");
     }
-    console.log(req.body.nombre);
-    const nombreSector = req.body.nombre;
+    const nombreSector = req.params.nombre;
     const result = await obtenerOtisDelSector(nombreSector);
-    res.json(result);
+    res.status(200).send(result);
   } catch (error) {
     console.log(error);
   }
