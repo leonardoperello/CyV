@@ -9,8 +9,8 @@ export async function obtenerOtisDelSector(nombreSector) {
   const otis = await modelOti.find({}); // si los estados estan vacios este metodo pincha
   const otisFiltradas = otis.filter((oti) =>
     oti.sector.find(
-      (sec) => 
-      sec.nombre === sector.nombre &&
+      (sec) =>
+        sec.nombre === sector.nombre &&
         sec.activo &&
         (oti.estados[oti.estados?.length - 1].tipoEstado?.nombre ===
           "en progreso" ||
@@ -19,9 +19,7 @@ export async function obtenerOtisDelSector(nombreSector) {
           oti.estados[oti.estados?.length - 1].tipoEstado?.nombre ===
             "inicializado")
     )
-  );
-  console.log("asdasdasd otis filtradas " + otisFiltradas);
-  //me quedo con las otis que se encuentran en el sector listas para trabajar.
+  ); //me quedo con las otis que se encuentran en el sector listas para trabajar.
   if (otisFiltradas.length) {
     return otisFiltradas.map((oti) => {
       return {

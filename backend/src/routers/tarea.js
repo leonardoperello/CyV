@@ -35,32 +35,35 @@ router.get("/obtenerTareas", async function (req, res) {
   }
 });
 router.post("/asignarTarea", async function (req, res) {
-<<<<<<< HEAD
-    try {
-        let data = req.body;
-        if (typeof req.body.observacion !== 'string') {
-            return res.status(400).send('El formato de la observacion es incorrecto');
-        }
-        if (typeof req.body.idOti !== 'string' || req.body.idOti.length !== 24) {
-            return res.status(400).send('El formato del id de Oti es incorrecto');
-        }
-        if (typeof req.body.idOperario !== 'string' || req.body.idOperario.length !== 24) {
-            return res.status(400).send('El formato del id del operario es incorrecto');
-        }
-        if (Object.keys(req.body.tareas).length === 0) {
-            return res.status(400).send('No existe una tarea');
-        }
-        const resultado = await asignarTareaOperario(data);
-        res.status(200).send(resultado);
-    } catch (error) {
-        res.status(400).send(error);
-=======
+  try {
+    let data = req.body;
+    if (typeof req.body.observacion !== "string") {
+      return res.status(400).send("El formato de la observacion es incorrecto");
+    }
+    if (typeof req.body.idOti !== "string" || req.body.idOti.length !== 24) {
+      return res.status(400).send("El formato del id de Oti es incorrecto");
+    }
+    if (
+      typeof req.body.idOperario !== "string" ||
+      req.body.idOperario.length !== 24
+    ) {
+      return res
+        .status(400)
+        .send("El formato del id del operario es incorrecto");
+    }
+    if (Object.keys(req.body.tareas).length === 0) {
+      return res.status(400).send("No existe una tarea");
+    }
+    const resultado = await asignarTareaOperario(data);
+    res.status(200).send(resultado);
+  } catch (error) {
+    res.status(400).send(error);
+  }
   try {
     let data = req.body;
     if (typeof req.body.observacion !== "string") {
       console.log("OBSERVACION");
       return res.status(400).send("El formato de la observacion es incorrecto");
->>>>>>> 26d9dfbf462bafbdab58e607e95569e58d8d81df
     }
     if (typeof req.body.idOti !== "string" || req.body.idOti.length !== 24) {
       console.log("OTI");
