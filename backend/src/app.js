@@ -9,6 +9,7 @@ import sectorRoutes from "./routers/sector";
 import clienteRoutes from "./routers/cliente";
 import operarioRoutes from "./routers/operario";
 import supervisorRoutes from "./routers/supervisor";
+import empleadoRoutes from "./routers/empleado";
 export const app = express();
 app.use(bodyParser.json());
 //cors
@@ -32,3 +33,4 @@ app.use("/sector", sectorRoutes);
 app.use("/cliente", clienteRoutes);
 app.use("/operario", operarioRoutes);
 app.use("/supervisor", supervisorRoutes);
+app.use("/empleado", empleadoRoutes)
