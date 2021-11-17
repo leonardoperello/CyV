@@ -15,13 +15,13 @@ export async function obtenerOtisDelSector(nombreSector) {
         (oti.estados[oti.estados?.length - 1].tipoEstado?.nombre ===
           "en progreso" ||
           oti.estados[oti.estados?.length - 1].tipoEstado?.nombre ===
-            "detenida" ||
+          "detenida" ||
           oti.estados[oti.estados?.length - 1].tipoEstado?.nombre ===
-            "inicializado")
+          "iniciada")
     )
   ); //me quedo con las otis que se encuentran en el sector listas para trabajar.
   if (otisFiltradas.length) {
-    return otisFiltradas.map((oti) => {
+    const otis = otisFiltradas.map((oti) => {
       return {
         idOti: oti._id,
         fechaInicio: oti.fechaInicio,
@@ -29,6 +29,7 @@ export async function obtenerOtisDelSector(nombreSector) {
         rosca: oti.rosca,
       };
     });
+    return otis;
   }
 }
 
@@ -39,7 +40,7 @@ export async function obtenerTareas(idOti) {
   const tareasFiltradas = oti.tareas.filter(
     (tarea) =>
       tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre ===
-        "iniciada" ||
+      "iniciada" ||
       tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "detenida"
   );
 
