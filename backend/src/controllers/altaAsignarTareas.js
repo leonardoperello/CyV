@@ -3,33 +3,27 @@ import { modelSector } from "../schemas/schemaSector";
 import { modelTarea } from "../schemas/schemaTarea";
 import { cargarEstado } from "../controllers/altaEstado.controllers";
 
-export async function obtenerOtisDelSector(nombreSector) {
-  const querySector = { nombre: nombreSector };
+export async function obtenerOtisDelSector(idSector) {
+  const querySector = { nombre: idSector }
   const sector = await modelSector.findOne(querySector);
-  const otis = await modelOti.find({}); // si los estados estan vacios este metodo pincha
-  const otisFiltradas = otis.filter((oti) =>
-    oti.sector.find(
-      (sec) =>
-        sec.nombre === sector.nombre &&
-        sec.activo &&
-        (oti.estados[oti.estados?.length - 1].tipoEstado?.nombre ===
-          "en progreso" ||
-          oti.estados[oti.estados?.length - 1].tipoEstado?.nombre ===
-            "detenida" ||
-          oti.estados[oti.estados?.length - 1].tipoEstado?.nombre ===
-            "inicializado")
-    )
-  ); //me quedo con las otis que se encuentran en el sector listas para trabajar.
+  const otis = await modelOti.find({});
+  const otisFiltradas = otis.filter(oti =>
+    oti.sector.find(sec =>
+      sec.nombre === sector.nombre && sec.activo && (oti.estados[oti.estados?.length - 1].tipoEstado?.nombre === "en progreso" || oti.estados[oti.estados?.length - 1].tipoEstado?.nombre === "detenida")));//me quedo con las otis que se encuentran en el sector listas para trabajar.
   if (otisFiltradas.length) {
-    return otisFiltradas.map((oti) => {
+
+    const otis = otisFiltradas.map(oti => {
       return {
         idOti: oti._id,
         fechaInicio: oti.fechaInicio,
         fechaFin: oti.fechaFin,
-        rosca: oti.rosca,
-      };
+        rosca: oti.rosca
+
+      }
     });
+    return otis
   }
+
 }
 
 export async function obtenerTareas(idOti) {
@@ -39,7 +33,7 @@ export async function obtenerTareas(idOti) {
   const tareasFiltradas = oti.tareas.filter(
     (tarea) =>
       tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre ===
-        "iniciada" ||
+      "iniciada" ||
       tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre === "detenida"
   );
 
