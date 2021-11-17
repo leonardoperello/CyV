@@ -22,12 +22,13 @@ router.get("/obtenerOtis/:nombre", async function (req, res) {
   }
 });
 
-router.get("/obtenerTareas", async function (req, res) {
+router.get("/obtenerTareas/:id", async function (req, res) {
   try {
-    if (typeof req.query.id !== "string" || req.query.id.length !== 24) {
+    if (typeof req.params.id !== "string" || req.params.id.length !== 24) {
       return res.status(400).send("El formato del id es incorrecto");
     }
-    const idOti = req.query.id;
+    console.log(req.params.id)
+    const idOti = req.params.id;
     const result = await obtenerTareas(idOti);
     res.json(result);
   } catch (error) {
