@@ -27,7 +27,6 @@ router.get("/obtenerTareas/:id", async function (req, res) {
     if (typeof req.params.id !== "string" || req.params.id.length !== 24) {
       return res.status(400).send("El formato del id es incorrecto");
     }
-    console.log(req.params.id)
     const idOti = req.params.id;
     const result = await obtenerTareas(idOti);
     res.json(result);
@@ -53,34 +52,6 @@ router.post("/asignarTarea", async function (req, res) {
         .send("El formato del id del operario es incorrecto");
     }
     if (Object.keys(req.body.tareas).length === 0) {
-      return res.status(400).send("No existe una tarea");
-    }
-    const resultado = await asignarTareaOperario(data);
-    res.status(200).send(resultado);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-  try {
-    let data = req.body;
-    if (typeof req.body.observacion !== "string") {
-      console.log("OBSERVACION");
-      return res.status(400).send("El formato de la observacion es incorrecto");
-    }
-    if (typeof req.body.idOti !== "string" || req.body.idOti.length !== 24) {
-      console.log("OTI");
-      return res.status(400).send("El formato del id de Oti es incorrecto");
-    }
-    if (
-      typeof req.body.idOperario !== "string" ||
-      req.body.idOperario.length !== 24
-    ) {
-      console.log("OPERARIO");
-      return res
-        .status(400)
-        .send("El formato del id del operario es incorrecto");
-    }
-    if (Object.keys(req.body.tareas).length === 0) {
-      console.log("tarea");
       return res.status(400).send("No existe una tarea");
     }
     const resultado = await asignarTareaOperario(data);
