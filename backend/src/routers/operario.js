@@ -21,13 +21,19 @@ router.get("/:id", async function (req, res) {
   }
 });
 
-router.get("operarioSector/:nombre", async function (req, res) {
+router.get("/operarioSector/:nombre", async function (req, res) {
   try {
-    if (typeof req.params.nombre !== "string") {
-      return res.status(400).send("El formato del nombre es incorrecto");
+    if (req.params.nombre !== "corte" &&
+    req.params.nombre !== "torneria" &&
+    req.params.nombre !== "fosfatizado" &&
+    req.params.nombre !== "granallado" &&
+    req.params.nombre !== "calidad" &&
+    req.params.nombre !== "deposito"
+    ) {
+      return res.status(400).send('El sector no existe');
     }
     const nombre = req.params.nombre;
-    const result = await modelOperario.findOne({ nombre: nombre });
+    const result = await modelOperario.find({ 'sector.nombre': nombre });
     res.json(result);
   } catch (error) {
     console.log(error);

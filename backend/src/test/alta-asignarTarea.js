@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 
 describe("Test de asignar tarea: ", () => {
   // CASO FELIZ
-  it.only('Asignar tarea a operario: asignacion correcta', async () => {
+  it('Asignar tarea a operario: asignacion correcta', async () => {
     const resSectores = await fetch(
       "http://localhost:8081/sector"
     );
@@ -59,7 +59,7 @@ describe("Test de asignar tarea: ", () => {
   // DISTINTOS CASOS PARA LOS CUALES FALLARIA
 
   // tratando de obtener las otis de un sector que no existe en el GET
-  it.only('GET: sector inexiste', async () =>{
+  it('GET: sector inexiste', async () =>{
     const resSectores = await fetch(
       "http://localhost:8081/sector"
     );
@@ -76,7 +76,7 @@ describe("Test de asignar tarea: ", () => {
   });
 
   // tratando de obtener las tareas con un id de oti erroneo en el GET
-  it.only('GET: idOti con longitud distinta', async () => {
+  it('GET: idOti con longitud distinta', async () => {
     const resSectores = await fetch(
       "http://localhost:8081/sector"
     );
@@ -100,7 +100,7 @@ describe("Test de asignar tarea: ", () => {
   });
 
   // tratando de asignar una tarea a un operario con un type de observacion numerico en el POST
-  it.only('POST: atributo observacion con tipo numerico', async () => {
+  it('POST: atributo observacion con tipo numerico', async () => {
     const resSectores = await fetch(
       "http://localhost:8081/sector"
     );
@@ -150,7 +150,7 @@ describe("Test de asignar tarea: ", () => {
   });
 
   // tratando de asignar una tarea a un operario con un id de oti erroneo en el POST
-  it.only('POST: atributo idOti con longitud distinta a 24', async () => {
+  it('POST: atributo idOti con longitud distinta a 24', async () => {
     const resSectores = await fetch(
       "http://localhost:8081/sector"
     );
@@ -199,7 +199,7 @@ describe("Test de asignar tarea: ", () => {
   });
 
   // tratando de asignar una tarea a un operario con un id de operario erroneo en el POST
-  it.only('POST: atributo idOperario con longitud distinta a 24', async () => {
+  it('POST: atributo idOperario con longitud distinta a 24', async () => {
     const resSectores = await fetch(
       "http://localhost:8081/sector"
     );
@@ -248,7 +248,7 @@ describe("Test de asignar tarea: ", () => {
   });
 
   // tratando de asignar una tarea a un operario con el atributo de tareas vacio en el POST
-  it.only('POST: atributo tareas vacio', async () => {
+  it('POST: atributo tareas vacio', async () => {
     const resSectores = await fetch(
       "http://localhost:8081/sector"
     );
