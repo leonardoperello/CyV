@@ -5,7 +5,6 @@ const router = new express.Router();
 router.get("/", async function (req, res) {
   try {
     const result = await modelSector.find({});
-    console.log(result);
     res.json(result);
   } catch (error) {
     console.log(error);

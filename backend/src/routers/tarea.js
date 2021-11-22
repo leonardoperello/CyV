@@ -11,8 +11,14 @@ const router = new express.Router();
 
 router.get("/obtenerOtis/:nombre", async function (req, res) {
   try {
-    if (typeof req.params.nombre !== "string") {
-      return res.status(400).send("Sector incorrecto");
+    if (req.params.nombre !== "corte" &&
+    req.params.nombre !== "torneria" &&
+    req.params.nombre !== "fosfatizado" &&
+    req.params.nombre !== "granallado" &&
+    req.params.nombre !== "calidad" &&
+    req.params.nombre !== "deposito"
+    ) {
+      return res.status(400).send('El sector no existe');
     }
     const nombreSector = req.params.nombre;
     const result = await obtenerOtisDelSector(nombreSector);
@@ -25,7 +31,7 @@ router.get("/obtenerOtis/:nombre", async function (req, res) {
 router.get("/obtenerTareas/:id", async function (req, res) {
   try {
     if (typeof req.params.id !== "string" || req.params.id.length !== 24) {
-      return res.status(400).send("El formato del id es incorrecto");
+      return res.status(400).send("El id ingresado es incorrecto");
     }
     const idOti = req.params.id;
     const result = await obtenerTareas(idOti);
@@ -55,16 +61,6 @@ router.post("/asignarTarea", async function (req, res) {
       return res.status(400).send("No existe una tarea");
     }
     const resultado = await asignarTareaOperario(data);
-    res.status(200).send(resultado);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
-router.get("/:id", async function (req, res) {
-  try {
-    console.log(req.params);
-
-    const resultado = await obtenerOtisDelSector(id);
     res.status(200).send(resultado);
   } catch (error) {
     res.status(400).send(error);
