@@ -42,7 +42,7 @@ describe("Testeando los casos correctos: ", () => {
       });
   });
 
-  it.only("Creando una nueva orden de produccion ", (done) => {
+  it("Creando una nueva orden de produccion ", (done) => {
     const ordenProduccion = {
       cuitCliente: "20332288354",
       detalle: "detalle de orden de produccion",

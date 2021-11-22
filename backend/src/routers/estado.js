@@ -45,10 +45,6 @@ router.get("/:id", async function (req, res) {
 router.put("/", async function (req, res) {
   try {
     let data = req.body;
-    if (!data) {
-      return res.status(400).send("parametros vacio");
-    }
-
     const resultado = await cambioEstadotareaAsignada(data);
     switch (resultado) {
       case "error id":
