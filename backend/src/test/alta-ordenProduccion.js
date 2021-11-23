@@ -1,165 +1,184 @@
 let chai = require("chai");
 let chaiHttp = require("chai-http");
 const expect = require("chai").expect;
+const fetch = require("node-fetch-npm");
 chai.use(chaiHttp);
 
 const url = "http://localhost:8081";
 
-describe("Testeando los casos correctos: ", () => {
-  it("Enviando un cuit de un cliente que existe", (done) => {
-    chai
-      .request(url)
-      .get("/cliente/20332288354")
-      .end(function (err, res) {
-        // console.log(res.error.text);
-        expect(res).to.have.status(200);
-        done();
-      });
-  });
+describe("Test de orden de produccion ", () => {
+  
+  it("GET: cuit de cliente inexistente", async () =>{
+    const resCliente = await fetch(
+      "http://localhost:8081/cliente/2035462783"
+    );
+    const cliente = await resCliente.text();
+    expect("Content-Type", /json/);
+    expect(resCliente.status).to.be.equal(400);
+  })
 
-  it("Creando una nueva rosca ", (done) => {
-    let rosca = {
-      id: "616e3f364ce714735d5f67a7",
-      descripcionTecnica: "es una rosca dificil de hacer",
-      medida: "20x50x10",
-      tipoDeRosca: {
-        descripcion: "descripcion_4",
-        nombre: "weich",
-        categoria: {
-          nombre: "premium",
-          descripcion: "exportacion marina y utilizacion para caños de gas",
-        },
-      },
+  it("POST: creando rosca con parametros incorrectos", async () =>{
+    const resCliente = await fetch(
+      "http://localhost:8081/cliente/89-596-7321"
+    );
+    const cliente = await resCliente.json();
+    expect("Content-Type", /json/);
+    expect(resCliente.status).to.be.equal(200);
+
+    const resSupervisor = await fetch(
+      "http://localhost:8081/supervisor"
+    );
+    const supervisor = await resSupervisor.json();
+    expect("Content-Type", /json/);
+    expect(resSupervisor.status).to.be.equal(200);
+
+    const resTipoRosca = await fetch(
+      "http://localhost:8081/rosca/tipoDeRosca"
+    );
+    const tipoRosca = await resTipoRosca.json();
+    expect("Content-Type", /json/);
+    expect(resTipoRosca.status).to.be.equal(200);
+
+    const data = {
+      descripcionTecnica: 123,
+      medida: 30,
+      tipoDeRosca: '8RD'
     };
-    chai
-      .request(url)
-      .post("/rosca/")
-      .send({ rosca })
-      .end(function (err, res) {
-        // console.log(res.text);
-        expect(res).to.have.status(200);
-        done();
-      });
-  });
 
-  it.only("Creando una nueva orden de produccion ", (done) => {
-    const ordenProduccion = {
-      cuitCliente: "20332288354",
-      detalle: "detalle de orden de produccion",
-      fecha: "2021-11-09",
-      supervisor: {
-        _id: "613bc8c397d979667ca2a137",
-        numeroEmpleado: "2",
-        DNI: "96-881-7733",
-        nombre: "Corey",
-        apellido: "Duling",
-        telefono: "850-421-9067",
-        nombreUsuario: "cduling1",
-        contraseña: "KgFLuaKY0ySG",
-        email: "cduling1@github.io",
+    const resCrearRosca = await fetch("http://localhost:8081/rosca/", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
       },
+    });
+
+    const roscaCreada = await resCrearRosca.text();
+    expect("Content-Type", /json/);
+    expect(resCrearRosca.status).to.be.equal(400);
+  })
+
+  it("POST: crear orden de produccion con parametros incorrectos", async () => {
+    const resCliente = await fetch(
+      "http://localhost:8081/cliente/89-596-7321"
+    );
+    const cliente = await resCliente.json();
+    expect("Content-Type", /json/);
+    expect(resCliente.status).to.be.equal(200);
+
+    const resSupervisor = await fetch(
+      "http://localhost:8081/supervisor"
+    );
+    const supervisor = await resSupervisor.json();
+    expect("Content-Type", /json/);
+    expect(resSupervisor.status).to.be.equal(200);
+
+    const resTipoRosca = await fetch(
+      "http://localhost:8081/rosca/tipoDeRosca"
+    );
+    const tipoRosca = await resTipoRosca.json();
+    expect("Content-Type", /json/);
+    expect(resTipoRosca.status).to.be.equal(200);
+
+    const data = {
+      descripcionTecnica: 'descripcion',
+      medida: '30x30x30',
+      tipoDeRosca: tipoRosca[0]
+    };
+
+    const resCrearRosca = await fetch("http://localhost:8081/rosca/", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const roscaCreada = await resCrearRosca.json();
+    expect("Content-Type", /json/);
+    expect(resCrearRosca.status).to.be.equal(200);
+
+    const data2 = {
+      cuitCliente: 12345657,
+      detalle: 123,
+      fecha: "22-11-2021",
+      supervisor: null,
       oti: [],
-      rosca: [
-        {
-          _id: "613e5383b2153ee73d71591a",
-          descripcionTecnica: "una rosca que la puede hacer cualquiera",
-          medida: "30x30x30",
-          tipoDeRosca: {
-            nombre: "8RD",
-            descripcion: "descripcion_1",
-            categoria: {
-              nombre: "tubing",
-              descripcion: "extraccion de petroleo",
-            },
-          },
-        },
-      ],
+      rosca: {}
     };
-    chai
-      .request(url)
-      .post("/orden/crearOrdenProduccion")
-      .send(ordenProduccion)
-      .end(function (err, res) {
-        console.log(res.error.text);
-        expect(res).to.have.status(400);
-        done();
-      });
-  });
-});
 
-// ---------------------------- TEST QUE DEBEN FALLAR -----------------------------
-
-describe("Testeando los casos incorrectos : ", () => {
-  it("Enviando un cuit de un cliente que no existe", (done) => {
-    chai
-      .request(url)
-      .get("/cliente/2033228835") // fallaria xq el cuit esta mal, le falta un caracter
-      .end(function (err, res) {
-        console.log(res.error.text);
-        expect(res).to.have.status(400);
-        done();
-      });
-  });
-
-  it("Creando una nueva rosca con parametros erroneos ", (done) => {
-    let rosca = {
-      id: "616e3f364ce714735d5f67a7",
-      descripcionTecnica: "es una rosca dificil de hacer",
-      medida: "20x50x10",
-      tipoDeRosca: {}, // fallaria xq el tipo de rosca esta vacio
-    };
-    chai
-      .request(url)
-      .post("/rosca/")
-      .send({ rosca })
-      .end(function (err, res) {
-        console.log(res.error.text);
-        expect(res).to.have.status(400);
-        done();
-      });
-  });
-
-  it("Creando una nueva orden de produccion con parametros incorrectos", (done) => {
-    const ordenProduccion = {
-      cuitCliente: "20332288354",
-      detalle: "detalle de orden de produccion",
-      fecha: "2021-11-10", // La fecha no corresponde con la de hoy!
-      supervisor: {
-        _id: "613bc8c397d979667ca2a137",
-        numeroEmpleado: "2",
-        DNI: "96-881-7733",
-        nombre: "Corey",
-        apellido: "Duling",
-        telefono: "850-421-9067",
-        nombreUsuario: "cduling1",
-        contraseña: "KgFLuaKY0ySG",
-        email: "cduling1@github.io",
+    const resCrearOrden = await fetch("http://localhost:8081/orden/crearOrdenProduccion", {
+      method: "POST",
+      body: JSON.stringify(data2),
+      headers: {
+        "Content-Type": "application/json",
       },
-      oti: [],
-      rosca: [
-        {
-          _id: "613e5383b2153ee73d71591a",
-          descripcionTecnica: "una rosca que la puede hacer cualquiera",
-          medida: "30x30x30",
-          tipoDeRosca: {
-            nombre: "8RD",
-            descripcion: "descripcion_1",
-            categoria: {
-              nombre: "tubing",
-              descripcion: "extraccion de petroleo",
-            },
-          },
-        },
-      ],
+    });
+
+    const crearOrden = await resCrearOrden.text();
+    expect("Content-Type", /json/);
+    expect(resCrearOrden.status).to.be.equal(400);
+  });
+
+  it("POST: Crear orden de produccion existosa", async () => {
+    const resCliente = await fetch(
+      "http://localhost:8081/cliente/89-596-7321"
+    );
+    const cliente = await resCliente.json();
+    expect("Content-Type", /json/);
+    expect(resCliente.status).to.be.equal(200);
+
+    const resSupervisor = await fetch(
+      "http://localhost:8081/supervisor"
+    );
+    const supervisor = await resSupervisor.json();
+    expect("Content-Type", /json/);
+    expect(resSupervisor.status).to.be.equal(200);
+
+    const resTipoRosca = await fetch(
+      "http://localhost:8081/rosca/tipoDeRosca"
+    );
+    const tipoRosca = await resTipoRosca.json();
+    expect("Content-Type", /json/);
+    expect(resTipoRosca.status).to.be.equal(200);
+
+    const data = {
+      descripcionTecnica: 'descripcion',
+      medida: '30x30x30',
+      tipoDeRosca: tipoRosca[0]
     };
-    chai
-      .request(url)
-      .post("/orden/crearOrdenProduccion")
-      .send(ordenProduccion)
-      .end(function (err, res) {
-        console.log(res.error.text);
-        expect(res).to.have.status(400);
-        done();
-      });
+
+    const resCrearRosca = await fetch("http://localhost:8081/rosca/", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const roscaCreada = await resCrearRosca.json();
+    expect("Content-Type", /json/);
+    expect(resCrearRosca.status).to.be.equal(200);
+
+    const data2 = {
+      cuitCliente: cliente.CUIT,
+      detalle: 'detalle',
+      fecha: "2021-11-22", // cambiar la fecha
+      supervisor: supervisor[0],
+      oti: [],
+      rosca: roscaCreada
+    };
+
+    const resCrearOrden = await fetch("http://localhost:8081/orden/crearOrdenProduccion", {
+      method: "POST",
+      body: JSON.stringify(data2),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const crearOrden = await resCrearOrden.json();
+    expect("Content-Type", /json/);
+    expect(resCrearOrden.status).to.be.equal(200);
   });
 });
