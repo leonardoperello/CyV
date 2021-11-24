@@ -10,6 +10,8 @@ import clienteRoutes from "./routers/cliente";
 import operarioRoutes from "./routers/operario";
 import supervisorRoutes from "./routers/supervisor";
 import empleadoRoutes from "./routers/empleado";
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('../swagger_output.json')
 export const app = express();
 app.use(bodyParser.json());
 //cors
@@ -23,6 +25,8 @@ app.use((req, res, next) => {
   res.header("Allow", "GET, POST, OPTIONS, PUT, DELETE");
   next();
 });
+
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 app.use("/oti", otiRoutes);
 app.use("/estado", estadoRoutes);
