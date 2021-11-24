@@ -21,18 +21,18 @@ router.get("/:id", async function (req, res) {
   }
 });
 
-router.get("/operarioSector/:nombre", async function (req, res) {
+router.get("/operarioSector/:nombreSector", async function (req, res) {
   try {
     if (req.params.nombre !== "corte" &&
-    req.params.nombre !== "torneria" &&
-    req.params.nombre !== "fosfatizado" &&
-    req.params.nombre !== "granallado" &&
-    req.params.nombre !== "calidad" &&
-    req.params.nombre !== "deposito"
+    req.params.nombreSector !== "torneria" &&
+    req.params.nombreSector !== "fosfatizado" &&
+    req.params.nombreSector !== "granallado" &&
+    req.params.nombreSector !== "calidad" &&
+    req.params.nombreSector !== "deposito"
     ) {
       return res.status(400).send('El sector no existe');
     }
-    const nombre = req.params.nombre;
+    const nombre = req.params.nombreSector;
     const result = await modelOperario.find({ 'sector.nombre': nombre });
     res.json(result);
   } catch (error) {

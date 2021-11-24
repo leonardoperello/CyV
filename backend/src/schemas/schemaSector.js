@@ -4,7 +4,7 @@ import { schemaOperario } from "./schemaOperario";
 export const schemaSector = new Schema({
   nombre: String,
   activo: Boolean,
-  operario: [schemaOperario],
+  operario: [],
 });
 
 export const modelSector = model("sector", schemaSector, "sector");
