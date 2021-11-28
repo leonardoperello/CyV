@@ -8,7 +8,12 @@ export const schemaCliente = new Schema({
   telefono: String,
   nombreEmpresa: String,
   email: String,
-  ordenProduccion: [],
+  ordenProduccion: [{
+    idOrdenProduccion: String,
+    fecha: Date,
+    detalle: String,
+    estado: String
+  }],
 });
 
 export const modelCliente = model("clientes", schemaCliente, "clientes");

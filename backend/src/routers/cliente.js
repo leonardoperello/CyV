@@ -3,58 +3,89 @@ import { modelCliente } from "../schemas/schemaCliente";
 const router = express.Router();
 
 router.get("/", async function (req, res) {
+  // #swagger.tags = ['Cliente']
+  // #swagger.description = 'Endpoint para obtener todos los clientes'
   try {
     const result = await modelCliente.find({});
+    /* #swagger.responses[200] = { 
+             schema: { $ref: "#/definitions/clientes" },
+             description: 'clientes' 
+      } */
     res.json(result.reverse());
   } catch (error) {
-    console.log(error);
+    // #swagger.responses[404] = { description: 'Error ' }
+    res.status(404).send("Error");
   }
 });
 
 router.get("/:cuit", async function (req, res) {
+  // #swagger.tags = ['Cliente']
+  // #swagger.description = 'Endpoint para obtener un cliente'
+  //#swagger.parameters['cuit'] = { description: 'cuit de la empresa.' }
   try {
     if (!typeof req.params.cuit === "string" || req.params.cuit.length !== 11) {
       return res.status(400).send("El formato del CUIT es incorrecto");
     }
     const cuit = req.params.cuit;
     const result = await modelCliente.findOne({ CUIT: cuit }); //buscamos al clinete por su cuit
+    /* #swagger.responses[200] = { 
+              schema: { $ref: "#/definitions/cliente" },
+              description: 'cliente' 
+       } */
     res.json(result);
   } catch (error) {
-    console.log(error);
+    // #swagger.responses[404] = { description: 'Error ' }
+    res.status(404).send("Error");
   }
 });
 
 router.post("/", async function (req, res) {
+  // #swagger.tags = ['Cliente']
+  // #swagger.description = 'Endpoint para crear un cliente'
+
   let data = req.body;
+  /* #swagger.parameters['cliente'] = {
+                 in: 'body',
+                 description: 'datos para crear cliente',
+                 required: true,
+                 type: 'object',
+                 schema: { $ref: "#/definitions/cliente" }
+          } */
   try {
     const resultInsert = await modelCliente.create(data);
-    // Deberia llamar a un metodo que me cree una nueva rosca y mandarselo al metodo de altaOrdenProduccion?
-    // const resultInsert = await altaOrdenProduccion(data);
+    /* #swagger.responses[200] = { 
+                  schema: { $ref: "#/definitions/cliente" },
+                  description: 'cliente' 
+           } */
     res.json(resultInsert);
   } catch (error) {
-    console.log(error);
+    // #swagger.responses[404] = { description: 'Error ' }
+    res.status(404).send("Error");
   }
 });
 
-router.patch("/:id", async function (req, res) {
+router.put("/:id", async function (req, res) {
+  // #swagger.tags = ['Cliente']
+  // #swagger.description = 'Endpoint para modificar cliente'
+  //#swagger.parameters['id'] = { description: 'ID cliente' }
   try {
     let orden = { _id: req.params.id };
     let data = req.body;
+    /* #swagger.parameters['cliente'] = {
+                 in: 'body',
+                 description: 'datos para crear cliente',
+                 required: true,
+                 type: 'object',
+                 schema: { $ref: "#/definitions/cliente" }
+          } */
     const result = await modelCliente.findOneAndUpdate(orden, data);
     res.json(result);
   } catch (error) {
-    console.log(error);
+    // #swagger.responses[404] = { description: 'Error ' }
+    res.status(404).send("Error");
   }
 });
 
-router.delete("/:id", async function (req, res) {
-  try {
-    const id = req.params.id;
-    const result = await modelCliente.deleteOne({ _id: id });
-    res.json(result);
-  } catch (error) {
-    console.log(error);
-  }
-});
+
 
 export default router;
