@@ -48,7 +48,6 @@ router.post("/", async function (req, res) {
                  in: 'body',
                  description: 'datos para crear cliente',
                  required: true,
-                 type: 'object',
                  schema: { $ref: "#/definitions/cliente" }
           } */
   try {
@@ -63,29 +62,4 @@ router.post("/", async function (req, res) {
     res.status(404).send("Error");
   }
 });
-
-router.put("/:id", async function (req, res) {
-  // #swagger.tags = ['Cliente']
-  // #swagger.description = 'Endpoint para modificar cliente'
-  //#swagger.parameters['id'] = { description: 'ID cliente' }
-  try {
-    let orden = { _id: req.params.id };
-    let data = req.body;
-    /* #swagger.parameters['cliente'] = {
-                 in: 'body',
-                 description: 'datos para crear cliente',
-                 required: true,
-                 type: 'object',
-                 schema: { $ref: "#/definitions/cliente" }
-          } */
-    const result = await modelCliente.findOneAndUpdate(orden, data);
-    res.json(result);
-  } catch (error) {
-    // #swagger.responses[404] = { description: 'Error ' }
-    res.status(404).send("Error");
-  }
-});
-
-
-
 export default router;

@@ -10,8 +10,8 @@ export const schemaTarea = new Schema({
   fechaFin: Date,
   numeroDeOrden: Number,
   tipoDeTarea: schemaTipoDeTarea,
-  sector: schemaSector, //convendria poner el id del sector
-  idOperario: String, //este id se agrega cuando se asigna la tarea.
+  sector: schemaSector,
+  idOperario: String,
   estado: [schemaEstado],
 });
 

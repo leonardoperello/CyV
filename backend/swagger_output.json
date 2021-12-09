@@ -150,7 +150,7 @@
           "200": {
             "description": "otis encontradas",
             "schema": {
-              "$ref": "#/definitions/arrayOrdenes"
+              "$ref": "#/definitions/Ordenes"
             }
           },
           "400": {
@@ -171,7 +171,6 @@
             "in": "body",
             "description": "datos para crear una oti",
             "required": true,
-            "type": "object",
             "schema": {
               "$ref": "#/definitions/oti"
             }
@@ -202,7 +201,6 @@
             "in": "body",
             "description": "datos para actulizar una oti",
             "required": true,
-            "type": "object",
             "schema": {
               "$ref": "#/definitions/oti"
             }
@@ -233,7 +231,6 @@
             "in": "body",
             "description": "datos para actulizar una oti",
             "required": true,
-            "type": "object",
             "schema": {
               "$ref": "#/definitions/oti"
             }
@@ -315,7 +312,6 @@
             "in": "body",
             "description": "datos para modificar el estado de una tarea, esto puede generar el cambio de esatdo de la oti y de sector",
             "required": true,
-            "type": "object",
             "schema": {
               "$ref": "#/definitions/cambioEstado"
             }
@@ -361,7 +357,6 @@
             "in": "body",
             "description": "datos para crear una rosca",
             "required": true,
-            "type": "object",
             "schema": {
               "$ref": "#/definitions/rosca"
             }
@@ -496,7 +491,6 @@
             "in": "body",
             "description": "datos para asignar una tarea",
             "required": true,
-            "type": "object",
             "schema": {
               "$ref": "#/definitions/asignarTarea"
             }
@@ -580,7 +574,6 @@
             "in": "body",
             "description": "datos para modificar una orden",
             "required": true,
-            "type": "object",
             "schema": {
               "$ref": "#/definitions/orden"
             }
@@ -611,7 +604,6 @@
             "in": "body",
             "description": "datos para crear una orden",
             "required": true,
-            "type": "object",
             "schema": {
               "$ref": "#/definitions/orden"
             }
@@ -711,7 +703,6 @@
             "in": "body",
             "description": "datos para crear cliente",
             "required": true,
-            "type": "object",
             "schema": {
               "$ref": "#/definitions/cliente"
             }
@@ -755,38 +746,6 @@
           "400": {
             "description": "Bad Request"
           },
-          "404": {
-            "description": "Error "
-          }
-        }
-      }
-    },
-    "/cliente/{id}": {
-      "put": {
-        "tags": [
-          "Cliente"
-        ],
-        "description": "Endpoint para modificar cliente",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "ID cliente"
-          },
-          {
-            "name": "cliente",
-            "in": "body",
-            "description": "datos para crear cliente",
-            "required": true,
-            "type": "object",
-            "schema": {
-              "$ref": "#/definitions/cliente"
-            }
-          }
-        ],
-        "responses": {
           "404": {
             "description": "Error "
           }

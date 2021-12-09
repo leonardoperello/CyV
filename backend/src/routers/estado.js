@@ -58,7 +58,6 @@ router.put("/", async function (req, res) {
                   in: 'body',
                   description: 'datos para modificar el estado de una tarea, esto puede generar el cambio de esatdo de la oti y de sector',
                   required: true,
-                  type: 'object',
                   schema: { $ref: "#/definitions/cambioEstado" }
            } */
     const resultado = await cambioEstadotareaAsignada(data);

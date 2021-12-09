@@ -46,7 +46,6 @@ router.post("/crearOrdenProduccion", async function (req, res) {
                in: 'body',
                description: 'datos para crear una orden',
                required: true,
-               type: 'object',
                schema: { $ref: "#/definitions/orden" }
         } */
   try {
@@ -100,7 +99,6 @@ router.patch("/:id", async function (req, res) {
              in: 'body',
              description: 'datos para modificar una orden',
              required: true,
-             type: 'object',
              schema: { $ref: "#/definitions/orden" }
       } */
     const result = await modelOrdenProduccion.findOneAndUpdate(orden, data);

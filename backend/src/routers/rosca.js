@@ -62,7 +62,6 @@ router.post("/", async function (req, res) {
              in: 'body',
              description: 'datos para crear una rosca',
              required: true,
-             type: 'object',
              schema: { $ref: "#/definitions/rosca" }
       } */
   try {

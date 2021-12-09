@@ -10,9 +10,9 @@ export async function tareasAsignadas(id_Operario) {
     const tareasFiltradas = tareas?.filter(
       (tarea) =>
         tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre ===
-          "iniciada" ||
+        "iniciada" ||
         tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre ===
-          "en progreso"
+        "en progreso" && (tarea.sector.activo)
       //busco por estado iniciada cuando no hay tareas en progreso xq la oti recien llego a mi sector
       //y si esta en progreso muestro lo q me falta si es que tengo mas tareas en estada iniciada
     );
@@ -33,7 +33,7 @@ export async function tareasAsignadas(id_Operario) {
         otiFiltrada.estados[otiFiltrada.estados.length - 1].tipoEstado
           .nombre === "iniciada"
       ) {
-        //si la oti esta en otro estado que no sea en progreso el operario no deberia ver nada, si el cambio de estado lo realiza el jefe de taller tener en cuenta el estado detenida
+        //si la oti esta en otro estado que no sea en progreso o iniciada el operario no deberia ver nada, si el cambio de estado lo realiza el jefe de taller tener en cuenta el estado detenida
         const tareas = {
           tareasOperario: tareasFiltradas,
           idOti: otiFiltrada._id,
@@ -46,9 +46,9 @@ export async function tareasAsignadas(id_Operario) {
   }
 }
 
-//esto se podria resolver en el front y cambiar el estado y actualizar la oti.
+
 export async function cambioEstadotareaAsignada(data) {
-  //mando la oti ,el id de la tarea seleccionada y el sector
+
   const queryOti = { _id: data.idOti };
   const queryTarea = { _id: data.idTarea };
   const querySector = { nombre: data.nombreSector };
@@ -64,7 +64,7 @@ export async function cambioEstadotareaAsignada(data) {
 
       if (
         tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre ===
-          "en progreso" &&
+        "en progreso" &&
         oti.estados[oti.estados.length - 1].tipoEstado?.nombre === "en progreso"
       ) {
         // controlo que el estado actual sea en progreso si no retorna vacio.
@@ -163,7 +163,7 @@ export async function cambioEstadotareaAsignada(data) {
     if (data.tipoEstado.nombre === "en progreso") {
       if (
         tarea.estado[tarea.estado.length - 1]?.tipoEstado?.nombre ===
-          "iniciada" &&
+        "iniciada" &&
         (oti.estados[oti.estados.length - 1].tipoEstado?.nombre ===
           "en progreso" ||
           oti.estados[oti.estados.length - 1].tipoEstado?.nombre === "iniciada")

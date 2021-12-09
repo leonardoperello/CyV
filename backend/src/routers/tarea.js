@@ -66,7 +66,6 @@ router.post("/asignarTarea", async function (req, res) {
               in: 'body',
               description: 'datos para asignar una tarea',
               required: true,
-              type: 'object',
               schema: { $ref: "#/definitions/asignarTarea" }
        } */
     if (typeof req.body.observacion !== "string") {

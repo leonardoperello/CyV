@@ -105,7 +105,7 @@ router.get("/obtenerOrdenes/:fecha", async function (req, res) {
       const resultado = await buscarOrdenes(data);
       /* #swagger.responses[200] = {
                 description: 'otis encontradas',
-                schema: { $ref: '#/definitions/arrayOrdenes' }
+                schema: { $ref: '#/definitions/Ordenes' }
         } */
 
       res.status(200).send(resultado);
@@ -130,7 +130,6 @@ router.post("/datosBasicos", async function (req, res) {
               in: 'body',
               description: 'datos para crear una oti',
               required: true,
-              type: 'object',
               schema: { $ref: "#/definitions/oti" }
        } */
     if (
@@ -166,7 +165,6 @@ router.put("/sectoresYTareas", async function (req, res) {
              in: 'body',
              description: 'datos para actulizar una oti',
              required: true,
-             type: 'object',
              schema: { $ref: "#/definitions/oti" }
       } */
     if (
@@ -201,7 +199,6 @@ router.put("/actualizarOrden", async function (req, res) {
            in: 'body',
            description: 'datos para actulizar una oti',
            required: true,
-           type: 'object',
            schema: { $ref: "#/definitions/oti" }
     } */
     if (
